@@ -10,6 +10,10 @@ List of methods:
 * `filter` - removes some values from the parent iterator
 * `flatten` - transforms embedded iterable to a flat sequence of elements
   (expands arrays and other generators)
+* `iterator` - creates a new async iterator by pushing values using 
+  methods `next`, `error` and `complete` (similar with Observers).
+  This method manages backpressure and allows to wait objects delivery
+  to stream consumers.
 * `map` - transforms items from the parent async generator to new values
 * `range` - select the specified range of element from the stream 
 * `series` - splits sequence of items to multiple async iterators
@@ -224,6 +228,46 @@ for await (let v of f(list)) {
 // - c
 // - d
 // - ...
+```
+
+`iterator` method
+-----------------
+
+Create a new async iterator "from scratch" by pushing values in the stream.
+This method allows to control backpressure because the observer methods 
+return promises resolved when the provided value is consumed at the other side. 
+
+This method accepts the following parameters:
+* `handler` - method accepting an observer object with the following methods:
+  - `async next(value)` - this method is used to provide new values
+  - `async complete()` - this method is used to notify about iteration ends
+  - `async error(err)` - this method is used to notify about iteration errors
+The handler method can return a function to call when the iteration process 
+is interrupted.
+  
+Example:
+
+```javascript
+import agen from '@agen/utils';
+
+// Prepare the mapping function
+ const f = agen.iterator((o) => {
+   (async () => {
+     await o.next('Hello');
+     await o.next('World');
+     await o.next('!');
+     o.complete();
+   })();
+   return () => console.log('Done')
+ });
+
+ for await (let item of f()) {
+   console.log('-', item);
+ }
+// Output:
+// - Hello
+// - World
+// - !
 ```
 
 `map` method
