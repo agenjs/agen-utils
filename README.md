@@ -3,28 +3,26 @@
 
 This package contains utility methods to work with async generators.
 List of methods:
-* `batch` - transform a sequence of values to sequence of arrays (batches)
+* [batch](#batch-method) - transform a sequence of values to sequence of arrays (batches)
    containing the specified number of elements
-* `compose` - compose multiple async generators to just one async generator function
-* `each` - performs additional operations before and after the iterated items
-* `filter` - removes some values from the parent iterator
-* `flatten` - transforms embedded iterable to a flat sequence of elements
+* [compose](#compose-method) - compose multiple async generators to just one async generator function
+* [each](#each-method) - performs additional operations before and after the iterated items
+* [filter](#filter-method) - removes some values from the parent iterator
+* [flatten](#flatten-method) - transforms embedded iterable to a flat sequence of elements
   (expands arrays and other generators)
-* `iterator` - creates a new async iterator by pushing values using 
+* [iterator](#iterator-method) - creates a new async iterator by pushing values using 
   methods `next`, `error` and `complete` (similar with Observers).
   This method manages backpressure and allows to wait objects delivery
   to stream consumers.
-* `map` - transforms items from the parent async generator to new values
-* `range` - select the specified range of element from the stream 
-* `series` - splits sequence of items to multiple async iterators
+* [map](#map-method) - transforms items from the parent async generator to new values
+* [range](#range-method) - select the specified range of element from the stream 
+* [series](#series-method) - splits sequence of items to multiple async iterators
   using the provided "split" method
-
 
 Example:
 ```javascript
 import agen from '@agen/utils';
 ```
-
 
 `batch` method
 --------------
