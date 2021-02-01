@@ -1,0 +1,9 @@
+export { default as asIterator } from "./asIterator.js";
+export { default as batch } from "./batch.js";
+export { default as compose } from "./compose.js";
+export { default as each } from "./each.js";
+export { default as filter } from "./filter.js";
+export { default as flatten } from "./flatten.js";
+export { default as map } from "./map.js";
+export { default as range } from "./range.js";
+export { default as series } from "./series.js";
