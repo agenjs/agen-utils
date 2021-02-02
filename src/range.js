@@ -1,6 +1,11 @@
-import filter from './filter.js';
-
-export default function range(from, count) {
-  if (isNaN(count)) { count = from; from = 0; }
-  return filter((value, idx) => (idx >= from && idx < from + count));
+export default function range(from = 0, count = Infinity) {
+  return async function* (it) {
+    let idx = 0;
+    if (count <= 0) return ;
+    for await (let value of it) {
+      if (idx >= from) (yield value);
+      idx++;
+      if (idx >= from + count) break;
+    }
+  }
 }
