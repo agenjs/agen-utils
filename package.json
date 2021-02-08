@@ -2,7 +2,6 @@
   "name": "@agen/utils",
   "version": "0.8.2",
   "description": "Async Generator utilities",
-  "type": "module",
   "keywords": [
     "async",
     "generators"
@@ -14,6 +13,7 @@
   },
   "main": "dist/agen-utils.js",
   "unpkg": "dist/agen-utils.min.js",
+  "jsdelivr": "dist/agen-utils.min.js",
   "module": "src/index.js",
   "repository": {
     "type": "git",
@@ -25,13 +25,14 @@
   ],
   "scripts": {
     "pretest": "rollup -c",
-    "test": "node ./test/index.js && eslint src",
+    "test": "node -r esm ./test/index.js && eslint src",
     "prepublishOnly": "rm -rf dist && yarn test",
     "postpublish": "zip -j dist/agen-utils.zip -- LICENSE README.md dist/agen-utils.js dist/agen-utils.min.js"
   },
   "sideEffects": false,
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^11.1.0",
+    "esm": "^3",
     "eslint": "7",
     "rollup": "2",
     "rollup-plugin-terser": "7",
