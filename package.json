@@ -1,6 +1,6 @@
 {
   "name": "@agen/utils",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "Async Generator utilities",
   "keywords": [
     "async",
@@ -32,8 +32,8 @@
   "sideEffects": false,
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^11.1.0",
-    "esm": "^3",
     "eslint": "7",
+    "esm": "^3",
     "rollup": "2",
     "rollup-plugin-terser": "7",
     "tape": "4",
