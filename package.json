@@ -1,6 +1,6 @@
 {
   "name": "@agen/utils",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "description": "Async Generator utilities",
   "keywords": [
     "async",
