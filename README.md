@@ -10,6 +10,7 @@ List of methods:
 * [filter](#filter-method) - removes some values from the parent iterator
 * [flatten](#flatten-method) - transforms embedded iterable to a flat sequence of elements
   (expands arrays and other generators)
+* [interrupt](#interrupt-method) - interrupts iterations when the specified callback method returns `false`
 * [iterator](#iterator-method) - creates a new async iterator by pushing values using 
   methods `next`, `error` and `complete` (similar with Observers).
   This method manages backpressure and allows to wait objects delivery
@@ -226,6 +227,54 @@ for await (let v of f(list)) {
 // - c
 // - d
 // - ...
+```
+
+`interrupt` method
+------------------
+Returns a new async iterator interrupting when the specified method(s) return `false`.
+
+This method accepts the following parameters:
+* `before` - if this method returns `false` then iterations are stopped before yielding 
+  the last value to the caller. This callback can be null. In this case the second parameter
+  - the `after` callback - is used.
+* `after` - if this method returns `false` then iterations are stopped after yielding 
+  the checked value.
+
+Both (`before` and `after`) callback method recieve the current value and its index
+(position) in the stream.
+
+Example:
+```javascript
+import agen from '@agen/utils';
+
+// Original data to iterate over:
+const list = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'];
+
+// Interrupt iterations on the third element
+// (just before delivering the third element):
+let f = agen.interrupt((value, idx) => idx === 3);
+for await (let b of f(list)) {
+  console.log(b);
+}
+// Will print
+// - a
+// - b 
+// - c
+
+
+console.log('------------');
+// Interrupt iterations just after delivering the third value.
+// Note that the first callback (`before` function) is `null`:
+f = agen.interrupt(null, (value, idx) => idx === 3);
+for await (let b of f(list)) {
+  console.log(b);
+}
+// Will print
+// ------------
+// - a
+// - b 
+// - c
+// - d
 ```
 
 `iterator` method
