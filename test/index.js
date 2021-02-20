@@ -7,5 +7,6 @@ import './fin-test.js';
 import './interrupt-test.js';
 import './iterator-test.js';
 import './map-test.js';
+import './multiplexer-test.js';
 import './range-test.js';
 import './series-test.js';

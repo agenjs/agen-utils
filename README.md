@@ -20,6 +20,8 @@ List of methods:
 * [iterate](#iterate-method) - creates and invoke a new async iterator; it is a "shortcut" 
   for the `iterator(init)()` call.
 * [map](#map-method) - transforms items from the parent async generator to new values
+* [multiplexer](#multiplexer-method) - allows to create multiple iterable consuming values generated
+  by one provider; it is a kind of "fork" method.
 * [range](#range-method) - select the specified range of element from the stream 
 * [series](#series-method) - splits sequence of items to multiple async iterators
   using the provided "split" method
@@ -424,6 +426,80 @@ import agen from '@agen/utils';
 // - B
 // - C
 ```
+
+
+`multiplexer` method
+--------------------
+
+This method returns an async generator function allowing to create 
+multiple consumers (iterators) of the same values. 
+Note the provider can push the next value only when *all* iterators
+consume the provided value. So the speed of value generation is 
+defined by the slowest consumer.
+
+This function is similar with the [[iterator](#iterator-method) method.
+
+This method accepts the following parameters:
+* `handler` - method accepting an observer object with the following methods:
+  - `async next(value)` - this method is used to provide new values
+  - `async complete()` - this method is used to notify about iteration ends
+  - `async error(err)` - this method is used to notify about iteration errors
+The handler method can return a function to call when the iteration process 
+is interrupted.
+
+Example:
+
+```javascript
+import agen from '@agen/utils';
+
+// Generate new values:
+ const f = agen.multiplexer((o) => {
+   (async () => {
+     await o.next('Hello');
+     await o.next('World');
+     await o.next('!');
+     await o.complete();
+   })();
+   return () => console.log('Done')
+ });
+
+ // Consume values in three different "threads".
+
+ // First consumer (the slowest one):
+ (async () => {
+   for await (let value of f()) {
+     console.log('* FIRST:', value);
+     await new Promise(r => setTimeout(r, 300));
+   }
+ })();
+
+ // Second consumer:
+ (async () => {
+   for await (let value of f()) {
+     console.log('* SECOND:', value);
+   }
+ })();
+
+ // Third consumer:
+ (async () => {
+   for await (let value of f()) {
+     console.log('* THIRD:', value);
+   }
+ })();
+
+// Output:
+// * FIRST: Hello
+// * SECOND: Hello
+// * THIRD: Hello
+// * FIRST: World
+// * SECOND: World
+// * THIRD: World
+// * FIRST: !
+// * SECOND: !
+// * THIRD: !
+// Done
+```
+
 
 `range` method
 --------------

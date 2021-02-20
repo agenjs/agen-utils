@@ -9,5 +9,6 @@ export { default as interrupt } from "./interrupt.js";
 export { default as iterate } from "./iterate.js";
 export { default as iterator } from "./iterator.js";
 export { default as map } from "./map.js";
+export { default as multiplexer } from "./multiplexer.js";
 export { default as range } from "./range.js";
 export { default as series } from "./series.js";
