@@ -6,6 +6,7 @@ export { default as filter } from "./filter.js";
 export { default as flatten } from "./flatten.js";
 export { default as fin } from "./fin.js";
 export { default as interrupt } from "./interrupt.js";
+export { default as iterate } from "./iterate.js";
 export { default as iterator } from "./iterator.js";
 export { default as map } from "./map.js";
 export { default as range } from "./range.js";

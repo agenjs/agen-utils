@@ -13,10 +13,12 @@ List of methods:
 * [fin](#fin-method) - calls a callback function when all iterations are finished/interrupted even in 
   the case of exceptions
 * [interrupt](#interrupt-method) - interrupts iterations when the specified callback method returns `false`
-* [iterator](#iterator-method) - creates a new async iterator by pushing values using 
+* [iterator](#iterator-method) - creates a new async iterator function by pushing values using 
   methods `next`, `error` and `complete` (similar with Observers).
   This method manages backpressure and allows to wait objects delivery
   to stream consumers.
+* [iterate](#iterate-method) - creates and invoke a new async iterator; it is a "shortcut" 
+  for the `iterator(init)()` call.
 * [map](#map-method) - transforms items from the parent async generator to new values
 * [range](#range-method) - select the specified range of element from the stream 
 * [series](#series-method) - splits sequence of items to multiple async iterators
@@ -345,6 +347,53 @@ import agen from '@agen/utils';
 // - World
 // - !
 ```
+
+`iterate` method
+-----------------
+See 
+
+Creates and invoke a new async iterator.
+It is a "shortcut"  the `iterator(init)()` call.
+
+This method allows to control backpressure - the observer methods 
+return promises resolved when the provided value is consumed at the other side. 
+
+This method accepts the following parameters:
+* `handler` - method accepting an observer object with the following methods:
+  - `async next(value)` - this method is used to provide new values
+  - `async complete()` - this method is used to notify about iteration ends
+  - `async error(err)` - this method is used to notify about iteration errors
+The handler method can return a function to call when the iteration process 
+is interrupted.
+  
+Example:
+
+```javascript
+import agen from '@agen/utils';
+
+// Creates an async iterator.
+// The difference with the agen.terator is that  
+// the returned value is the ready to use iterator
+// (and not a function to invoke).
+const iterator = agen.iterate((o) => {
+  (async () => {
+    await o.next('Hello');
+    await o.next('World');
+    await o.next('!');
+    o.complete();
+  })();
+  return () => console.log('Done')
+});
+
+for await (let item of iterator) {
+  console.log('-', item);
+}
+// Output:
+// - Hello
+// - World
+// - !
+```
+
 
 `map` method
 ------------
