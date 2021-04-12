@@ -1,5 +1,5 @@
 export default function iterator(init, newQueue = (() => [])) {
-  return async function* () {
+  return async function* (...args) {
     const queue = newQueue();
     let promise, notify, push = async (error, value, done) => {
       const slot = { error, value, done };
@@ -13,7 +13,7 @@ export default function iterator(init, newQueue = (() => [])) {
       next: (value) => push(undefined, value, false),
       complete: () => push(undefined, undefined, true),
       error: err => push(err, undefined, true)
-    });
+    }, ...args);
 
     let slot;
     try {

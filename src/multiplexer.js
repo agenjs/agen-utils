@@ -4,7 +4,7 @@ export default function multiplexer(init, newQueue) {
   const read = iterator(init, newQueue);
   let list = [];
   const forAll = async (action) => (await Promise.all(list.map(action)));
-  (async () => {
+  (async() => {
     let error;
     try {
       for await (let value of read()) { await forAll((o) => o.next(value)) }
@@ -15,11 +15,11 @@ export default function multiplexer(init, newQueue) {
       try { await forAll(f); } finally { list = null; }
     }
   })();
-  return async function* () {
+  return async function* (...args) {
     if (!list) throw new Error('Iterations finished');
     yield* iterator(o => {
       list = [...list, o];
       return () => list = list.filter(_ => _ !== o);
-    }, newQueue)();
+    }, newQueue)(...args);
   }
 }

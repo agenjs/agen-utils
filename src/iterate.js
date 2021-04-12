@@ -1,2 +1,2 @@
 import iterator from './iterator.js';
-export default function iterate(init) { return iterator(init)(); }
+export default function iterate(init, ...args) { return iterator(init)(...args); }
