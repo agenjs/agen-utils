@@ -1,6 +1,9 @@
 @agen/utils
 ===========
 
+*Note* An interactive version of this documentation can be found here:
+https://observablehq.com/@kotelnikov/agen-utils
+
 This package contains utility methods to work with async generators.
 List of methods:
 * [batch](#batch-method) - transform a sequence of values to sequence of arrays (batches)
@@ -352,7 +355,7 @@ import agen from '@agen/utils';
 
 `iterate` method
 -----------------
-See 
+See the [iterator](#iterator-method) method.
 
 Creates and invoke a new async iterator.
 It is a "shortcut"  the `iterator(init)()` call.
