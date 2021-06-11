@@ -13,16 +13,17 @@
   },
   "type": "module",
   "files": [
-    "dist/**/*.cjs",
+    "dist/package.json",
+    "dist/**/*.js",
     "src/**/*.js"
   ],
   "module": "src/index.js",
   "main": "src/index.js",
-  "jsdelivr": "dist/agen-utils.min.cjs",
-  "unpkg": "dist/agen-utils.min.cjs",
+  "jsdelivr": "dist/agen-utils.min.js",
+  "unpkg": "dist/agen-utils.min.js",
   "exports": {
-    "umd": "./dist/agen-utils.cjs",
-    "require": "./dist/agen-utils.cjs",
+    "umd": "./dist/agen-utils.js",
+    "require": "./dist/agen-utils.js",
     "default": "./src/index.js"
   },
   "repository": {
@@ -37,12 +38,12 @@
   },
   "sideEffects": false,
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^11.1.0",
+    "@rollup/plugin-node-resolve": "13.0.0",
     "eslint": "7",
-    "esm": "^3",
     "rollup": "2",
+    "rollup-plugin-generate-package-json": "3",
     "rollup-plugin-terser": "7",
-    "tape": "5",
+    "tape": "4",
     "tape-await": "0.1"
   }
 }
