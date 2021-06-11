@@ -1,6 +1,6 @@
 {
   "name": "@agen/utils",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "description": "Async Generator utilities",
   "keywords": [
     "async",
@@ -11,7 +11,6 @@
   "author": {
     "name": "Mikhail Kotelnikov"
   },
-
   "type": "module",
   "files": [
     "dist/**/*.cjs",
@@ -25,8 +24,7 @@
     "umd": "./dist/agen-utils.cjs",
     "require": "./dist/agen-utils.cjs",
     "default": "./src/index.js"
-  },  
-
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/agenjs/agen-utils.git"
