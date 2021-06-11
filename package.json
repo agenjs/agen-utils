@@ -11,26 +11,29 @@
   "author": {
     "name": "Mikhail Kotelnikov"
   },
-  "main": "dist/agen-utils.js",
-  "unpkg": "dist/agen-utils.min.js",
-  "jsdelivr": "dist/agen-utils.min.js",
+
+  "type": "module",
+  "files": [
+    "dist/**/*.cjs",
+    "src/**/*.js"
+  ],
   "module": "src/index.js",
+  "main": "src/index.js",
+  "jsdelivr": "dist/agen-utils.min.cjs",
+  "unpkg": "dist/agen-utils.min.cjs",
   "exports": {
-    "package.json": "./package.json",
-    "import": "./src/index.js",
-    "require": "./dist/agen-utils.js"
-  },
+    "umd": "./dist/agen-utils.cjs",
+    "require": "./dist/agen-utils.cjs",
+    "default": "./src/index.js"
+  },  
+
   "repository": {
     "type": "git",
     "url": "https://github.com/agenjs/agen-utils.git"
   },
-  "files": [
-    "dist/**/*.js",
-    "src/**/*.js"
-  ],
   "scripts": {
     "pretest": "rollup -c",
-    "test": "node -r esm ./test/index.js && eslint src",
+    "test": "node ./test/index.js && eslint src",
     "prepublishOnly": "rm -rf dist && yarn test",
     "postpublish": "zip -j dist/agen-utils.zip -- LICENSE README.md dist/agen-utils.js dist/agen-utils.min.js"
   },

@@ -7,7 +7,7 @@ const config = {
   input: "src/index.js",
   external: Object.keys(meta.dependencies || {}).filter(key => /^@agen/.test(key)),
   output: {
-    file: `dist/${distName}.js`,
+    file: `dist/${distName}.cjs`,
     name: "agen",
     format: "umd",
     indent: false,
@@ -26,7 +26,7 @@ export default [
     ...config,
     output: {
       ...config.output,
-      file: `dist/${distName}.min.js`
+      file: `dist/${distName}.min.cjs`
     },
     plugins: [
       ...config.plugins,
