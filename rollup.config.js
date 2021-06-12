@@ -19,7 +19,8 @@ const config = {
   plugins: [
     nodeResolve(),
     generatePackageJson({
-      baseContents: { 
+      outputFolder: 'dist/cjs',
+      baseContents: {
         "type": "commonjs"
       }
     })
