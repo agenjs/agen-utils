@@ -13,18 +13,19 @@
   },
   "type": "module",
   "files": [
-    "dist/package.json",
+    "dist/**/package.json",
     "dist/**/*.js",
     "src/**/*.js"
   ],
-  "module": "src/index.js",
-  "main": "src/index.js",
-  "jsdelivr": "dist/agen-utils.min.js",
-  "unpkg": "dist/agen-utils.min.js",
+  "main": "dist/esm/agen-utils-esm.js",
+  "module": "dist/esm/agen-utils-esm.js",
+  "jsdelivr": "dist/cjs/agen-utils.min.js",
+  "unpkg": "dist/cjs/agen-utils.min.js",
   "exports": {
-    "umd": "./dist/agen-utils.js",
-    "require": "./dist/agen-utils.js",
-    "default": "./src/index.js"
+    "package.json": "./package.json",
+    "umd": "./dist/cjs/agen-utils.min.js",
+    "require": "./dist/cjs/agen-utils.js",
+    "default": "./dist/esm/agen-utils-esm.js"
   },
   "repository": {
     "type": "git",

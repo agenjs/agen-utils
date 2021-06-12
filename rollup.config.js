@@ -8,7 +8,7 @@ const config = {
   input: "src/index.js",
   external: Object.keys(meta.dependencies || {}).filter(key => /^@agen/.test(key)),
   output: {
-    file: `dist/${distName}.js`,
+    file: `dist/cjs/${distName}.js`,
     name: "agen",
     format: "umd",
     indent: false,
@@ -32,7 +32,32 @@ export default [
     ...config,
     output: {
       ...config.output,
-      file: `dist/${distName}.min.js`
+      file: `dist/cjs/${distName}.min.js`
+    },
+    plugins: [
+      ...config.plugins,
+      terser({
+        output: {
+          preamble: config.output.banner
+        }
+      })
+    ]
+  },
+
+  {
+    ...config,
+    output: {
+      ...config.output,
+      file: `dist/esm/${distName}-esm.js`,
+      format: "es"
+    },
+  },
+  {
+    ...config,
+    output: {
+      ...config.output,
+      file: `dist/esm/${distName}-esm.min.js`,
+      format: "es"
     },
     plugins: [
       ...config.plugins,
