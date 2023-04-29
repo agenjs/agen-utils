@@ -22,6 +22,7 @@ List of methods:
   to stream consumers.
 * [iterate](#iterate-method) - creates and invoke a new async iterator; it is a "shortcut" 
   for the `iterator(init)()` call.
+* [listen](#listen-method) - runs an iteration cycle and notify about recieved values to the provided observer object or a callback method
 * [map](#map-method) - transforms items from the parent async generator to new values
 * [multiplexer](#multiplexer-method) - allows to "multiply" values returned by one iterator between multiple listeners; it is a kind of "fork" method.
 * [range](#range-method) - select the specified range of element from the stream 
@@ -398,6 +399,37 @@ for await (let item of iterator) {
 // - !
 ```
 
+`listen` method
+---------------
+
+This is a synchronious method running internally iteration cycles and notifying about recieved values to the provided observer object or a callback function.
+
+This method accepts the following parameters:
+* `it` - async iterator providing new values
+* `observer` - an async callback function or an observer object with the following methods: 
+  - `async next(value)` - this method is called when a new value provided by the iterator
+  - `async complete()` - optional method to call at the end of iterations
+  - `async error(err)` - options method called if an error was thrown during interations
+
+Returns a function interrupting iterations.
+
+Example:
+
+```javascript
+import agen from '@agen/utils';
+
+// Prepare the mapping function
+const list = [ 'a', 'b', 'c' ]
+const cleanup = agen.listen(list, (v) => console.log('-', v));
+// ...
+await new Promise(r => setTimeout(r, 100));
+cleanup();
+
+// Output:
+// - a
+// - b
+// - c
+```
 
 `map` method
 ------------
