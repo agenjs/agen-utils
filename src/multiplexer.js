@@ -1,25 +1,40 @@
-import iterator from './iterator.js';
+import iterator from "./iterator.js";
 
-export default function multiplexer(init, newQueue) {
-  const read = iterator(init, newQueue);
+export default function multiplexer(it, newQueue) {
   let list = [];
-  const forAll = async (action) => (await Promise.all(list.map(action)));
-  (async () => {
-    let error;
+  const start = async (o) => {
+    list.push(o);
+    if (list.length > 1) return;
+
+    const forAll = async (action) => {
+      await Promise.all(list.map(action));
+    };
     try {
-      for await (let value of read()) { await forAll((o) => o.next(value)) }
-    } catch (err) {
-      error = err;
+      for await (const value of it) {
+        await forAll((o) => o.next(value));
+      }
+      await forAll((o) => o.complete());
+    } catch (error) {
+      await forAll((o) => o.error(error));
     } finally {
-      const f = error ? (o) => o.error(error) : (o) => o.complete();
-      try { await forAll(f); } finally { list = null; }
+      list = null;
     }
-  })();
+  };
+  const stop = async (o) => {
+    list = list.filter((_) => _ !== o);
+    if (list.length === 0) {
+      it.complete && it.complete();
+    }
+  };
   return async function* () {
-    if (!list) throw new Error('Iterations finished');
-    yield* iterator(o => {
-      list = [...list, o];
-      return () => list = list.filter(_ => _ !== o);
-    }, newQueue)();
-  }
+    if (!list) throw new Error("Iterations finished");
+    let observer;
+    try {
+      yield* iterator((o) => {
+        start(observer = o);
+      }, newQueue)();
+    } finally {
+      stop(observer);
+    }
+  };
 }
