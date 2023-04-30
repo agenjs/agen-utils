@@ -1,4 +1,6 @@
-export default function iterator(init, newQueue = (() => [])) {
+export default function iterator(init, newQueue) {
+  // Uses the default queue (list) if the newQueue is undefined or null:
+  newQueue = newQueue || (() => []);  
   return async function* () {
     const queue = newQueue();
     let promise, notify, push = async (error, value, done) => {

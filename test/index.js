@@ -13,4 +13,5 @@ import './map-test.js';
 import './multiplexer-test.js';
 import './range-test.js';
 import './series-test.js';
+import './slot-test.js';
 // */

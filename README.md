@@ -28,6 +28,7 @@ List of methods:
 * [multiplexer](#multiplexer-method) - allows to "multiply" values returned by one iterator between multiple listeners; it is a kind of "fork" method.
 * [range](#range-method) - select the specified range of element from the stream 
 * [series](#series-method) - splits sequence of items to multiple async iterators using the provided "split" method
+* [slot](#slot-method) - creates a new async generator function containing all observer methods (`next`, `complete` and `error`) as well as the `value` property; these methods and fields can be used to provide new values dispatched between multiple slot readers
 * [use](#use-method) - an alias for the [listenAll](#listenall-method) method
 
 Example:
@@ -683,6 +684,83 @@ for await (let serie of f(cars)) {
 // - 2007 Mercedes-Benz E320 Bluetec
 /
 ```
+
+
+`slot` method
+---------------
+
+Creates a new async generator function containing all observer methods (`next`, `complete` and `error`) as well as the `value` property; these methods and fields can be used to provide new values dispatched between multiple slot readers.
+
+Parameter:
+* `value` - initial value returned by this slot
+* `newQueue` - the queue used to schedule new values handling; by default it uses the `newSkipQueue` keeping only the last enqueued value and discarding all values provided while the previous values are handled by consumers
+
+Returns an async generator function dispatching the same values between multiple readers. The returned slot contains the following methods and fields:
+* Observable methods:
+  * `async next(val)` - pushes the new value to all listeners
+  * `async complete()`  - finalizes iterations and notifies all listeners about it
+  * `async error(err)` - notify about an error and interrupts iterations
+* Fields:
+  * `value` - read/write field giving access to the last slot value
+  * `promise` - a promise resolved when the main iterator is finished
+
+Each iteration process can provide its own callback function transforming the iterated values (see example below).
+
+Example:
+```javascript
+import agen from '@agen/utils';
+
+// Create a new slot with the empty (undefined) value:
+const slot = agen.slot();
+
+// Create multiple readers of this slot:
+
+// First reader iterates over values returned by the slot and transforms them to upper case strings.
+const firstConsumerPromise = (async () => {
+  // This consumer will transform the returned string to upper case: 
+  const transform = (s = '')  => s.toUpperCase();
+  for await (const value of slot(transform)) {
+    console.log('- First Reader:', value);
+  }
+})();
+
+// The second consumer transforms string to the lower case:
+const secondConsumerPromise = (async () => {
+  const transform = (s = '')  => s.toLowerCase();
+  for await (const value of slot(transform)) {
+    console.log('- Second Reader:', value);
+  }
+})();
+
+// Now we can provide values to the slot:
+const providerPromise = (async () => {
+  const names = ["James Bond", "John Smith"];
+  for (let i = 0; i < names.length; i++) {
+    slot.value = names[i];
+
+    // We can also use the `next` function for that. 
+    // It allows to wait until all consumers handle the provided value.
+    //// await slot.next(array[i]);
+    await new Promise(r => setTimeout(r, 10));
+  }
+  // Call the `complete` method to interrupt iterations 
+  // for all consumers.
+  slot.complete();
+})();
+
+Promise.resolve().then(() => Promise.all([
+  firstConsumerPromise,
+  secondConsumerPromise,
+  providerPromise
+]));
+
+// Output:
+// - First Reader: JAMES BOND
+// - Second Reader: james bond
+// - First Reader: JOHN SMITH
+// - Second Reader: john smith
+```
+
 
 `use` method
 ------------

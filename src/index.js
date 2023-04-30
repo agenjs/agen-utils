@@ -12,6 +12,8 @@ export { default as listen } from "./listen.js";
 export { default as listenAll } from "./listenAll.js";
 export { default as map } from "./map.js";
 export { default as multiplexer } from "./multiplexer.js";
+export { default as newSkipQueue } from "./newSkipQueue.js";
 export { default as range } from "./range.js";
 export { default as series } from "./series.js";
+export { default as slot } from "./slot.js";
 export { default as use } from "./listenAll.js";
