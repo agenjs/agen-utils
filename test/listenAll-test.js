@@ -5,15 +5,11 @@ tape(`listenAll should combine multiple iterator`, async (t) => {
   await test([[], []], []);
   await test([[""]], [[""]]);
   await test([["a"]], [["a"]]);
-  await test([["a"], ["b"]], [["a", undefined], ["a", "b"]]);
+  await test([["a"], ["b"]], [["a", "b"]]);
   await test([["a"], ["b"], ["c"]], [
-    ["a", undefined, undefined],
-    ["a", "b", undefined],
     ["a", "b", "c"],
   ]);
   await test([["a1", "a2"], ["b"], ["c1", "c2"]], [
-    ["a1", undefined, undefined],
-    ["a1", "b", undefined],
     ["a1", "b", "c1"],
     [
       "a2",

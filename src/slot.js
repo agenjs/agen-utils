@@ -22,13 +22,15 @@ export default function slot(value, newQueue = newSkipQueue) {
     }
   }
   values.promise = promise;
-  Object.assign(values, observer);
+  Object.assign(values, observer, {
+    next: (v) => observer.next(value = v),
+  });
   Object.defineProperty(values, "value", {
     get: () => value,
     set: (v) => {
       value !== v && values.next(v);
     },
   });
-  values.next(value);
+  (value !== undefined) && values.next(value);
   return values;
 }

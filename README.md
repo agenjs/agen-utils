@@ -27,6 +27,7 @@ List of methods:
 * [map](#map-method) - transforms items from the parent async generator to new values
 * [multiplexer](#multiplexer-method) - allows to "multiply" values returned by one iterator between multiple listeners; it is a kind of "fork" method.
 * [range](#range-method) - select the specified range of element from the stream 
+* [select](#select-method) - selects allow to combine multiple iterators and create a new slot with the resulting value
 * [series](#series-method) - splits sequence of items to multiple async iterators using the provided "split" method
 * [slot](#slot-method) - creates a new async generator function containing all observer methods (`next`, `complete` and `error`) as well as the `value` property; these methods and fields can be used to provide new values dispatched between multiple slot readers
 * [use](#use-method) - an alias for the [listenAll](#listenall-method) method
@@ -635,6 +636,38 @@ for await (let item of f(list)) {
 // - c
 // - d
 ```
+`select` method
+---------------
+
+Selects allow to combine multiple iterators and create a new slot with the resulting value. This method returns a new `slot` giving access for mulitiple consumers to resulting values.
+
+Parameters:
+* `generators` - a list of iterators/generators to combine in one object
+* `select` - a method recieving multiple fields as an array and returning the resulting value associated with this slot
+
+Example:
+```javascript
+import agen from '@agen/utils';
+
+const firstName = agen.slot("John");
+const lastName = agen.slot("Smith");
+const fullName = agen.select({
+  firstName,
+  lastName,
+}, (o) => `${o.firstName} ${o.lastName}`);
+
+await new Promise((r) => setTimeout(r, 1));
+console.log('-', fullName.value);
+// Output:
+// - John Smith
+
+firstName.value = 'James';
+lastName.value = 'Bond';
+await new Promise((r) => setTimeout(r, 1));
+console.log('-', fullName.value);
+// Output:
+// - James Bond
+
 
 `series` method
 ---------------
@@ -684,7 +717,6 @@ for await (let serie of f(cars)) {
 // - 2007 Mercedes-Benz E320 Bluetec
 /
 ```
-
 
 `slot` method
 ---------------
