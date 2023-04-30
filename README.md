@@ -23,11 +23,12 @@ List of methods:
 * [iterate](#iterate-method) - creates and invoke a new async iterator; it is a "shortcut" 
   for the `iterator(init)()` call.
 * [listen](#listen-method) - runs an iteration cycle and notify about recieved values to the provided observer object or a callback method
+* [listenAll](#listenall-method) - listen multiple iterators and notifies the registered observer about each new combination of returned values; accepts a list of iterators/generators or an object with iterators as fields
 * [map](#map-method) - transforms items from the parent async generator to new values
 * [multiplexer](#multiplexer-method) - allows to "multiply" values returned by one iterator between multiple listeners; it is a kind of "fork" method.
 * [range](#range-method) - select the specified range of element from the stream 
-* [series](#series-method) - splits sequence of items to multiple async iterators
-  using the provided "split" method
+* [series](#series-method) - splits sequence of items to multiple async iterators using the provided "split" method
+* [use](#use-method) - an alias for the [listenAll](#listenall-method) method
 
 Example:
 ```javascript
@@ -431,6 +432,81 @@ cleanup();
 // - c
 ```
 
+
+`listenAll` method
+---------------
+
+This method listens multiple iterators and notifies the registered observer about each new combination of returned values; accepts a list of iterators/generators or an object with iterators as fields.
+
+Parameters:
+* `generators` - list of iterators or an object containing iterators as fields; if this is an object then the registered observer will recieve iterated values as object fields
+* `observer` - an async callback function or an observer object with the following methods: 
+  - `async next(value)` - this method is called when a new value provided by the iterator
+  - `async complete()` - optional method to call at the end of iterations
+  - `async error(err)` - options method called if an error was thrown during interations
+
+Returns a function interrupting iterations.
+
+Example 1: listen iterators arrays
+
+```javascript
+import agen from '@agen/utils';
+
+// Prepare the mapping function
+const numbers = [ '007', '000', '008' ]
+const names = [ 'James Bond', 'John Smith' ]
+const cleanup = agen.listenAll([
+  toAsyncIterator(numbers),
+  toAsyncIterator(names)
+], (v) => console.log('-', v));
+// ...
+await new Promise(r => setTimeout(r, 100));
+cleanup();
+// Output:
+// - [ '007', undefined ]
+// - [ '007', 'James Bond' ]
+// - [ '000', 'James Bond' ]
+// - [ '000', 'John Smith' ]
+// - [ '008', 'John Smith' ]
+
+```
+
+Example 2: listen objects with iterators
+
+```javascript
+import agen from '@agen/utils';
+
+// Prepare the mapping function
+const numbers = [ '007', '000', '008' ]
+const names = [ 'James Bond', 'John Smith' ]
+
+cleanup = agen.listenAll({
+  number : toAsyncIterator(numbers),
+  name : toAsyncIterator(names)
+}, (v) => console.log('-', v));
+// ...
+await new Promise(r => setTimeout(r, 100));
+cleanup();
+// Output:
+// - { number: '007', name: undefined }
+// - { number: '007', name: 'James Bond' }
+// - { number: '000', name: 'James Bond' }
+// - { number: '000', name: 'John Smith' }
+// - { number: '008', name: 'John Smith' }
+```
+
+Utility function used  in these examples:
+```js
+// Utility method transforming arrays to async iterators
+async function* toAsyncIterator(list, delay = 10) {
+  for await (const value of list) {
+    await new Promise((r) => setTimeout(r, Math.round(Math.random(delay))));
+    yield value;
+  }
+}
+
+```
+
 `map` method
 ------------
 
@@ -607,3 +683,8 @@ for await (let serie of f(cars)) {
 // - 2007 Mercedes-Benz E320 Bluetec
 /
 ```
+
+`use` method
+------------
+
+This is an alias for the [listenAll](#listenall-method) method. See documentation there.
