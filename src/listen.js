@@ -11,7 +11,7 @@ export default function listen(it, observer) {
       let slot;
       while (!done && (slot = await it.next())) {
         if (done || slot.done) break;
-        await observer.next(slot.value);
+        await observer.next(await slot.value);
       }
       observer.complete && await observer.complete();
     } catch (error) {

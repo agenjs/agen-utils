@@ -18,7 +18,7 @@ export default function listenAll(generators = [], observer = (v) => v) {
         for (let i = 0; i < values.length; i++) {
           if (values[i] === undefined) return ;
         }
-        return observer.next(select(values));
+        return await observer.next(select(await Promise.all(values)));
       },
       complete: observer.complete,
       error: observer.error
