@@ -28,7 +28,7 @@ export default function slot(value, newQueue = newSkipQueue) {
   Object.defineProperty(values, "value", {
     get: () => value,
     set: (v) => {
-      value !== v && values.next(v);
+      values.next(v);
     },
   });
   (value !== undefined) && values.next(value);
