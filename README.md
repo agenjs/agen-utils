@@ -667,7 +667,7 @@ await new Promise((r) => setTimeout(r, 1));
 console.log('-', fullName.value);
 // Output:
 // - James Bond
-
+```
 
 `series` method
 ---------------
