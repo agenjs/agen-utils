@@ -9,5 +9,5 @@ export default function batch(batchSize = 1) {
       }
     }
     if (batch.length) yield batch;
-  }
+  };
 }

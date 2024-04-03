@@ -4,5 +4,5 @@ export default function filter(accept) {
     for await (let value of await it) {
       if (await accept(value, idx++)) yield value;
     }
-  }
+  };
 }

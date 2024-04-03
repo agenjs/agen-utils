@@ -4,5 +4,5 @@ export default function map(f) {
     for await (let value of await it) {
       yield await f(value, idx++);
     }
-  }
+  };
 }

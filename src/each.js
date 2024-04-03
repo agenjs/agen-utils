@@ -3,12 +3,12 @@ export default function each(before, after) {
     let idx = 0;
     for await (const value of await it) {
       try {
-        before && await before(value, idx);
+        before && (await before(value, idx));
         await (yield value);
       } finally {
-        after && await after(value, idx);
+        after && (await after(value, idx));
         idx++;
       }
     }
-  }
+  };
 }

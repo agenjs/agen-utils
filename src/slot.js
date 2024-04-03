@@ -12,9 +12,9 @@ export default function slot(value, newQueue = newSkipQueue) {
   const f = multiplexer(
     compose(
       iterator((o) => (observer = o), newQueue),
-      fin((error) => (error ? reject(error) : resolve())),
+      fin((error) => (error ? reject(error) : resolve()))
     ),
-    newQueue,
+    newQueue
   );
   async function* values(filter = (v) => v) {
     for await (let value of f()) {
@@ -23,7 +23,7 @@ export default function slot(value, newQueue = newSkipQueue) {
   }
   values.promise = promise;
   Object.assign(values, observer, {
-    next: (v) => observer.next(value = v),
+    next: (v) => observer.next((value = v)),
   });
   Object.defineProperty(values, "value", {
     get: () => value,
@@ -31,6 +31,6 @@ export default function slot(value, newQueue = newSkipQueue) {
       values.next(v);
     },
   });
-  (value !== undefined) && values.next(value);
+  value !== undefined && values.next(value);
   return values;
 }

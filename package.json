@@ -17,34 +17,35 @@
     "dist/**/*.js",
     "src/**/*.js"
   ],
-  "main": "dist/esm/agen-utils-esm.js",
-  "module": "dist/esm/agen-utils-esm.js",
-  "jsdelivr": "dist/cjs/agen-utils.min.js",
-  "unpkg": "dist/cjs/agen-utils.min.js",
-  "exports": {
-    "package.json": "./package.json",
-    "umd": "./dist/cjs/agen-utils.min.js",
-    "require": "./dist/cjs/agen-utils.js",
-    "default": "./dist/esm/agen-utils-esm.js"
-  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "module": "dist/index.js",
+  "jsdelivr": "dist/index.js",
+  "unpkg": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/agenjs/agen-utils.git"
   },
   "scripts": {
-    "pretest": "rollup -c",
-    "test": "node ./test/index.js && eslint src",
-    "prepublishOnly": "rm -rf dist && yarn test",
-    "postpublish": "zip -j dist/agen-utils.zip -- LICENSE README.md dist/agen-utils.js dist/agen-utils.min.js"
+    "build": "rm -rf dist && tsup && cp ./src/index.d.ts ./dist/",
+    "zip" : "zip -j dist/agen-utils.zip -- LICENSE README.md dist/index.js dist/index.d.ts",
+    "watch": "tsup --watch sandbox.ts",
+    "clean": "rm -rf dist",
+    "lint": "eslint \"**/*.ts\"",
+    "test": "vitest",
+    "prepublishOnly": "rm -rf dist && yarn test && yarn build",
+    "postpublish": "yarn zip"
   },
   "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "13.0.0",
-    "eslint": "7",
-    "rollup": "2",
-    "rollup-plugin-generate-package-json": "3",
-    "rollup-plugin-terser": "7",
-    "tape": "4",
-    "tape-await": "0.1"
+    "@types/node": "^20.11.16",
+    "eslint": "^8.56.0",
+    "expect.js": "^0.3.1",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.2"
   }
 }

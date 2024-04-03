@@ -1,6 +1,7 @@
 export default function fin(action) {
   return async function* (it) {
-    let error, idx = 0
+    let error,
+      idx = 0;
     try {
       for await (let value of it) {
         idx++;
@@ -12,5 +13,5 @@ export default function fin(action) {
     } finally {
       await action(error, idx);
     }
-  }
+  };
 }

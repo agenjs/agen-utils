@@ -4,7 +4,7 @@ export default function listen(it, observer) {
   let done = false;
   (async () => {
     try {
-      it = asIterator(it)
+      it = asIterator(it);
       if (typeof observer === "function") {
         observer = { next: observer };
       }
@@ -13,9 +13,9 @@ export default function listen(it, observer) {
         if (done || slot.done) break;
         await observer.next(await slot.value);
       }
-      observer.complete && await observer.complete();
+      observer.complete && (await observer.complete());
     } catch (error) {
-      observer.error && await observer.error(error);
+      observer.error && (await observer.error(error));
     }
   })();
   return () => {

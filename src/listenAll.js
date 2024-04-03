@@ -16,12 +16,12 @@ export default function listenAll(generators = [], observer = (v) => v) {
       next: async (value) => {
         values[idx] = value;
         for (let i = 0; i < values.length; i++) {
-          if (values[i] === undefined) return ;
+          if (values[i] === undefined) return;
         }
         return await observer.next(select(await Promise.all(values)));
       },
       complete: observer.complete,
-      error: observer.error
+      error: observer.error,
     })
   );
   return () => registrations.forEach((r) => r());

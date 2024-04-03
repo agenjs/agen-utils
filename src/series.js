@@ -1,18 +1,25 @@
-import asIterator from './asIterator.js';
+import asIterator from "./asIterator.js";
 
 export default function series(split) {
   return async function* (values) {
     const it = asIterator(values);
-    if (!it) return ;
-    let error, slot, counter = -1;
+    if (!it) return;
+    let error,
+      slot,
+      counter = -1;
     try {
-      while (!slot || !slot.done) { yield chunk(); }
+      while (!slot || !slot.done) {
+        yield chunk();
+      }
     } catch (err) {
       error = err;
       throw err;
     } finally {
-      if (error) { it.throw && await it.throw(error); }
-      else { it.return && await it.return(); }
+      if (error) {
+        it.throw && (await it.throw(error));
+      } else {
+        it.return && (await it.return());
+      }
     }
     async function* chunk() {
       while (!slot || !slot.done) {
@@ -22,5 +29,5 @@ export default function series(split) {
         if (slot.done || !!(await split(slot.value, counter))) break;
       }
     }
-  }
+  };
 }
