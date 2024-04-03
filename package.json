@@ -33,7 +33,7 @@
     "clean": "rm -rf dist",
     "lint": "eslint \"**/*.ts\"",
     "test": "vitest",
-    "prepublishOnly": "rm -rf dist && yarn test && yarn build",
+    "prepublishOnly": "rm -rf dist && yarn test --run && yarn build",
     "postpublish": "yarn zip"
   },
   "sideEffects": false,
