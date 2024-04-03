@@ -1,6 +1,6 @@
 {
   "name": "@agen/utils",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "Async Generator utilities",
   "keywords": [
     "async",
@@ -28,7 +28,7 @@
   },
   "scripts": {
     "build": "rm -rf dist && tsup && cp ./src/index.d.ts ./dist/",
-    "zip" : "zip -j dist/agen-utils.zip -- LICENSE README.md dist/index.js dist/index.d.ts",
+    "zip": "zip -j dist/agen-utils.zip -- LICENSE README.md dist/index.js dist/index.d.ts",
     "watch": "tsup --watch sandbox.ts",
     "clean": "rm -rf dist",
     "lint": "eslint \"**/*.ts\"",
