@@ -13,9 +13,10 @@
   },
   "type": "module",
   "files": [
-    "dist/**/package.json",
     "dist/**/*.js",
-    "src/**/*.js"
+    "dist/**/*.ts",
+    "src/**/*.js",
+    "src/**/*.ts"
   ],
   "main": "src/index.js",
   "types": "src/index.d.ts",
