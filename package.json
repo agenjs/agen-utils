@@ -17,8 +17,8 @@
     "dist/**/*.js",
     "src/**/*.js"
   ],
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
   "module": "dist/index.js",
   "jsdelivr": "dist/index.js",
   "unpkg": "dist/index.js",

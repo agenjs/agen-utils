@@ -1,5 +1,9 @@
 declare module "@agen/utils" {
-  export type Observer<T, E = Error> = {
+  export type AsyncIterable<T> = AsyncGenerator<T> | (() => AsyncGenerator<T>);
+  export type SyncIterable<T> = Generator<T> | (() => Generator<T>);
+  export type Iterable<T> = SyncIterable<T> | AsyncIterable<T>;
+
+  export type Observer<T = any, E = Error> = {
     // Pushes a new value to all listeners.
     next(val: T): Promise<void>;
     // Finalizes iterations and notifies all listeners about it
@@ -9,93 +13,98 @@ declare module "@agen/utils" {
   };
 
   // https://github.com/agenjs/agen-utils/ v0.11.0 Copyright 2023 Mikhail Kotelnikov
-  export function asIterator<T>(value: any): AsyncGenerator<T, void, unknown>;
+  export function asIterator<T>(
+    value: Iterable<T>
+  ): AsyncGenerator<T, void, unknown>;
 
   export function batch<T = any>(
     batchSize: number = 1
-  ): AsyncGeneratorFunction<T>;
+  ): (it: Iterable<T>) => AsyncGenerator<T>;
 
-  export function compose<T = any, R = any>(
-    ...list: AsyncGeneratorFunction<T>[]
-  ): AsyncGeneratorFunction<R>;
+  export function compose<T = any, R = T>(
+    ...list: Iterable<T>[]
+  ): (it: Iterable<T>) => AsyncGenerator<R>;
 
   export function each<T>(
     before?: (value: T) => void,
     after?: (value: T) => void
-  ): AsyncGeneratorFunction<T>;
+  ): (it: Iterable<T>) => AsyncGenerator<T>;
 
   export function filter<T>(
     accept: (value: T) => boolean
-  ): AsyncGeneratorFunction<T>;
+  ): (it: Iterable<T>) => AsyncGenerator<T>;
 
-  export function flatten<T>(): AsyncGeneratorFunction<T>;
+  export function flatten<T = any>(): (it: any) => AsyncGenerator<T>;
 
-  export function fin<T>(
-    action: (error: Error, index: number) => void
-  ): AsyncGeneratorFunction<T>;
+  export function fin<T = any>(
+    action: (error: Error, index: number) => void | Promise<T>
+  ): (it: Iterable<T>) => AsyncGenerator<T>;
 
-  export function interrupt<T>(
+  export function interrupt<T = any>(
     before?: (value: T, index: number) => boolean,
     after: (value: T, index: number) => boolean
-  ): AsyncGeneratorFunction<T>;
+  ): (it: Iterable<T>) => AsyncGenerator<T>;
 
   export type Unsubscribe = () => void;
 
-  export type Queue = {
-    push: (value: any) => void | Promise<void>;
-    shift: () => undefined | Promise<T>;
+  export type Queue<T = any> = {
+    push: (value: T) => void | Promise<T>;
+    shift: () => void | Promise<T>;
   };
-  export function iterator<T, E>(
-    init: (observer: Observer<T, E>) => undefined | Unsubscribe,
-    newQueue?: Queue
-  ): AsyncGeneratorFunction<T>;
+  export function iterator<T, E = Error>(
+    init: (observer: Observer<T, E>) => void | Unsubscribe,
+    newQueue?: Queue<T>
+  ): () => AsyncGenerator<T>;
 
   export function iterate<T, E>(
-    init: (observer: Observer<T, E>) => undefined | Unsubscribe
+    init: (observer: Observer<T, E>) => void | Unsubscribe
   ): AsyncGenerator<T>;
 
   export function listen<T>(
-    it: AsyncGenerator<T>,
-    observer: (value: T) => void | Promise<void>
+    generators: Iterable<T>,
+    observer: Observer<T> | ((value: T) => void | Promise<void>)
   ): Unsubscribe;
 
-  export function listenAll(
-    generators: AsyncGenerator[] = [],
-    observer: (values: any[]) => any
+  export function listenAll<T = any>(
+    generators: Record<string, Iterable<T>> | Iterable<T>[] = [],
+    observer: Observer<T> | ((values: T[]) => void | Promise<void>)
   ): Unsubscribe;
 
   export function map<T>(
     f: (value: T, index: number) => any
-  ): AsyncGeneratorFunction<T>;
+  ): (it: Iterable<T>) => AsyncGenerator<T>;
 
   export function multiplexer<T>(
-    it: AsyncGenerator<T>,
-    newQueue?: Queue,
+    it: Iterable<T>,
+    newQueue?: Queue<T>,
     awaitNew?: boolean = false
-  ): AsyncGeneratorFunction<T>;
+  ): () => AsyncGenerator<T>;
 
-  export function newSkipQueue(): Queue;
+  export function newSkipQueue<T = any>(): Queue<T>;
 
   export function range<T>(
     from: number = 0,
     count: number = Infinity
-  ): AsyncGeneratorFunction<T>;
+  ): (it: Iterable<T>) => AsyncGenerator<T>;
 
   export function series<T>(
     split: (value: T) => boolean
-  ): AsyncGeneratorFunction<T>;
+  ): (it: Iterable<T>) => AsyncGenerator<T>;
 
-  export type Slot<T> = (() => AsyncGenerator<T>) &
+  export type Slot<T> = () => AsyncGenerator<T> &
     Observer<T> & {
       value: T;
     } & {
       promise: Promise<void>;
     };
 
-  export function slot<T>(value: T, newQueue?: Queue = newSkipQueue): Slot<T>;
+  export function slot<T>(
+    value: T,
+    newQueue?: Queue<T> = newSkipQueue
+  ): Slot<T>;
 
-  export function select<T>(
-    generators: AsyncGenerator = [],
-    transform: (values: any[]) => T
-  ): AsyncGeneratorFunction<T>;
+  export function select<T = any>(
+    generators: Iterable<T>[] = [],
+    transform: (values: T[]) => T
+  ): (it: Iterable<T>) => AsyncGenerator<T>;
 }
