@@ -1,5 +1,6 @@
 import { describe, it, expect } from "./deps.ts";
 import agen from "../index.ts";
+import { toAsyncIterator } from "./toAsyncIterator.ts";
 
 const list = ["a", "d", "e", "f", "g", "k", "l", "m", "p"];
 
@@ -58,69 +59,75 @@ describe("range", () => {
 
   test(
     "range async: should be able to return zero values (1)",
-    toAsyncGenerator(list),
+    toAsyncIterator(list),
     5,
     0,
     []
   );
   test(
     "range async: should be able to return zero values (2)",
-    toAsyncGenerator(list),
+    toAsyncIterator(list),
     0,
     0,
     []
   );
   test(
     "range async: should be able to return one value (1)",
-    toAsyncGenerator(list),
+    toAsyncIterator(list),
     list.length - 1,
     1,
     ["p"]
   );
   test(
     "range async: should be able to return one value (2)",
-    toAsyncGenerator(list),
+    toAsyncIterator(list),
     0,
     1,
     ["a"]
   );
   test(
     "range async: should be able to return one value (3)",
-    toAsyncGenerator(list),
+    toAsyncIterator(list),
     3,
     1,
     ["f"]
   );
   test(
     "range async: should be able to return range from the end",
-    toAsyncGenerator(list),
+    toAsyncIterator(list),
     0,
     1000,
     list
   );
   test(
     "range async: should be able to return a slice of the list",
-    toAsyncGenerator(list),
+    toAsyncIterator(list),
     3,
     4,
     list.slice(3, 3 + 4)
   );
   test(
     "range async: should be able to return 3 values",
-    toAsyncGenerator(list),
+    toAsyncIterator(list),
     list.length - 3,
     3,
     ["l", "m", "p"]
   );
   test(
     "range async: should be able to return all values",
-    toAsyncGenerator(list),
+    toAsyncIterator(list),
     0,
     1000,
     list
   );
 
-  function test(msg, list, idx, count, control) {
+  function test(
+    msg: string,
+    list: Iterable<string> | AsyncGenerator<string>,
+    idx: number,
+    count: number,
+    control: string[]
+  ) {
     it(msg, async (t) => {
       const result = [];
       const f = agen.range(idx, count);
@@ -129,14 +136,5 @@ describe("range", () => {
       }
       expect(result).toEqual(control);
     });
-  }
-
-  async function* toAsyncGenerator(list, maxTimeout = 10) {
-    for await (let item of list) {
-      await new Promise((r) =>
-        setTimeout(r, Math.round(maxTimeout * Math.random()))
-      );
-      yield item;
-    }
   }
 });

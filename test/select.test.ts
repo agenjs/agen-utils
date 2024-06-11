@@ -22,7 +22,8 @@ describe("select", () => {
         firstName,
         lastName,
       },
-      (o) => `${o.firstName} ${o.lastName}`
+      (o: { firstName: string; lastName: string }) =>
+        `${o.firstName} ${o.lastName}`
     );
     await new Promise((r) => setTimeout(r, 1));
     expect(fullName.value).toBe("John Smith");
@@ -36,7 +37,8 @@ describe("select", () => {
         firstName,
         lastName,
       },
-      (o) => `${o.firstName} ${o.lastName}`
+      (o: { firstName: string; lastName: string }) =>
+        `${o.firstName} ${o.lastName}`
     );
     await new Promise((r) => setTimeout(r, 1));
     expect(fullName.value).toBe("John Smith");
@@ -51,18 +53,25 @@ describe("select", () => {
   it("should be able to listen slots with transformation functions", async (t) => {
     const firstName = agen.slot("John");
     const lastName = agen.slot("Smith");
-    const fullName = agen.select(
+    const fullName = agen.select<
+      {
+        firstName: string;
+        lastName: string;
+      },
+      string
+    >(
       {
         firstName,
         lastName,
       },
-      (o) => `${o.firstName} ${o.lastName}`
+      (o: { firstName: string; lastName: string }) =>
+        `${o.firstName} ${o.lastName}`
     );
 
-    const values = [];
+    const values: string[] = [];
     const cleanup = agen.listen(
-      fullName((s) => `*${(s || "").toUpperCase()}*`),
-      (v) => {
+      fullName((s: string) => `*${(s || "").toUpperCase()}*`),
+      (v: string) => {
         values.push(v);
       }
     );

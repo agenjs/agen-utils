@@ -17,9 +17,9 @@ describe("listenAll", () => {
       ]
     );
 
-    async function test(lists, control) {
-      const results = [];
-      const cleanup = agen.listenAll(lists.map(toAsyncIterator), (v) =>
+    async function test(lists: string[][], control: string[][]) {
+      const results: string[] = [];
+      const cleanup = agen.listenAll(lists.map(toAsyncIterator), (v: string) =>
         results.push(v)
       );
       await new Promise((r) => setTimeout(r, 100));
@@ -28,9 +28,10 @@ describe("listenAll", () => {
     }
   });
 
-  async function* toAsyncIterator(list, delay = 10) {
+  async function* toAsyncIterator<T>(list: T[]): AsyncGenerator<T> {
+    const delay: number = 5;
     for await (const value of list) {
-      await new Promise((r) => setTimeout(r, Math.round(Math.random(delay))));
+      await new Promise((r) => setTimeout(r, delay));
       yield value;
     }
   }

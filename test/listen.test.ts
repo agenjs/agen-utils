@@ -8,9 +8,11 @@ describe("listen(...)", () => {
     await test(["a"], ["a"]);
     await test(["a", "b", "c"], ["a", "b", "c"]);
     await test(["a", "b", "c", "d", "d"], ["a", "b", "c", "d", "d"]);
-    async function test(strings, control) {
-      const results = [];
-      const cleanup = agen.listen(strings, (v) => results.push(v));
+    async function test(strings: string[], control: string[]) {
+      const results: string[] = [];
+      const cleanup = agen.listen<string>(strings, (v: string) =>
+        results.push(v)
+      );
       await new Promise((r) => setTimeout(r, 10));
       await cleanup();
       expect(results).toEqual(control);

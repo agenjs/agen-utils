@@ -1,17 +1,18 @@
 import { describe, it, expect } from "./deps.ts";
 import agen from "../index.ts";
+import { toAsyncIterator } from "./toAsyncIterator.ts";
 
 const list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"];
 
 describe("fin(action)", () => {
   it("fin(action) is called after iterations over all available data", async () => {
-    let error,
+    let error: Error | undefined,
       count = 0;
-    const f = agen.fin((e, c) => {
+    const f = agen.fin<Error, number>((e: Error, c: number) => {
       error = e;
       count = c;
     });
-    const it = toAsyncIterator(list);
+    const it = toAsyncIterator<string>(list);
     for await (let v of f(it)) {
     }
     expect(error).toBe(undefined);
@@ -21,7 +22,7 @@ describe("fin(action)", () => {
   it("fin(action) is called after interrupted iterations", async () => {
     let error,
       count = 0;
-    const f = agen.fin((e, c) => {
+    const f = agen.fin((e: Error, c: number) => {
       error = e;
       count = c;
     });
@@ -35,10 +36,10 @@ describe("fin(action)", () => {
   });
 
   it("fin(action) is called after execeptions throw by values provider", async () => {
-    let catchedError,
-      error,
+    let catchedError: Error | undefined,
+      error: Error | undefined,
       count = 0;
-    const f = agen.fin((e, c) => {
+    const f = agen.fin((e: Error, c: number) => {
       error = e;
       count = c;
     });
@@ -50,16 +51,16 @@ describe("fin(action)", () => {
       for await (let v of f(it)) {
       }
     } catch (e) {
-      catchedError = e;
+      catchedError = e as Error;
     }
     expect(error).toEqual(catchedError);
     expect(count).toBe(breakIdx);
   });
 
   it("fin(action) is called after execeptions throw by the caller (consumer)", async () => {
-    let error,
+    let error: Error | undefined,
       count = 0;
-    const f = agen.fin((e, c) => {
+    const f = agen.fin<Error, number>((e: Error, c: number) => {
       error = e;
       count = c;
     });
@@ -77,11 +78,4 @@ describe("fin(action)", () => {
   });
 });
 
-async function* toAsyncIterator(list, action) {
-  let idx = 0;
-  for (let value of list) {
-    action && (await action(value, idx++));
-    yield value;
-    await new Promise((r) => setTimeout(r, 5));
-  }
-}
+

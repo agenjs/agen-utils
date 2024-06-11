@@ -4,9 +4,9 @@ import agen from "../index.ts";
 describe("each(before, after)", () => {
   it("sync each(before, after) returns a generator performing additional actions before and after each item", async () => {
     const traces = [];
-    const f = agen.each(
-      (v, i) => traces.push(`- before [${i}:${v}]`),
-      (v, i) => traces.push(`- after [${i}:${v}]`)
+    const f = agen.each<string>(
+      (v: string, i: number) => traces.push(`- before [${i}:${v}]`),
+      (v: string, i: number) => traces.push(`- after [${i}:${v}]`)
     );
     const list = ["a", "b", "c"];
     for await (const v of f(list)) {
@@ -27,13 +27,14 @@ describe("each(before, after)", () => {
 
   it("async each(before, after) returns a generator performing additional actions before and after each item", async () => {
     const traces = [];
-    const randomPause = async (t) => await new Promise((r) => setTimeout(r, t));
+    const randomPause = async (t: number) =>
+      await new Promise((r) => setTimeout(r, t));
     const f = agen.each(
-      async (v, i) => {
+      async (v: string, i: number) => {
         await randomPause(20);
         traces.push(`- before [${i}:${v}]`);
       },
-      async (v, i) => {
+      async (v: string, i: number) => {
         await randomPause(20);
         traces.push(`- after [${i}:${v}]`);
       }
@@ -57,13 +58,14 @@ describe("each(before, after)", () => {
 
   it("async each(before, after) returns a generator performing additional actions before and after each item", async () => {
     const traces = [];
-    const randomPause = async (t) => await new Promise((r) => setTimeout(r, t));
+    const randomPause = async (t: number) =>
+      await new Promise((r) => setTimeout(r, t));
     const f = agen.each(
-      async (v, i) => {
+      async (v: string, i: number) => {
         await randomPause(20);
         traces.push(`- before [${i}:${v}]`);
       },
-      async (v, i) => {
+      async (v: string, i: number) => {
         await randomPause(20);
         traces.push(`- after [${i}:${v}]`);
       }
@@ -89,13 +91,13 @@ describe("each(before, after)", () => {
 
     // compose method allows to combine multiple operations in one:
     const f = agen.compose(
-      agen.filter((_, i) => i % 2 == 0), // Filter only even values
+      agen.filter((_: string, i: number) => i % 2 == 0), // Filter only even values
       agen.each(
         // Prints "xml" tags
-        (v) => result.push(`<${v}>`),
-        (v) => result.push(`</${v}>`)
+        (v: string) => result.push(`<${v}>`),
+        (v: string) => result.push(`</${v}>`)
       ),
-      agen.map((v, i) => v.toUpperCase()) // Transforms characters to upper case
+      agen.map((v: string, i: number) => v.toUpperCase()) // Transforms characters to upper case
     );
 
     // Define the original sequence to transform:

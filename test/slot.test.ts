@@ -13,23 +13,23 @@ describe("slot", () => {
 
   it("should be able to notify the same sequentially value multiple times", async (t) => {
     const array = ["A", "B", "B", "B", "C", "D"];
-    const slot = agen.slot();
+    const slot = agen.slot<string>();
 
-    const result1 = [];
+    const result1: string[] = [];
     let firstPromise = (async () => {
       for await (const value of slot()) {
         result1.push(value);
       }
     })();
 
-    const result2 = [];
+    const result2: string[] = [];
     let secondPromise = (async () => {
       for await (const value of slot()) {
         result2.push(value);
       }
     })();
 
-    const result3 = [];
+    const result3: string[] = [];
     let thirdPromise = (async () => {
       for await (const value of slot()) {
         result3.push(value);
@@ -52,23 +52,23 @@ describe("slot", () => {
 
   it("should be able to notify multiple listeners using the 'next' method", async (t) => {
     const array = ["A", "B", "C", "D"];
-    const slot = agen.slot();
+    const slot = agen.slot<string>();
 
-    const result1 = [];
+    const result1: string[] = [];
     let firstPromise = (async () => {
       for await (const value of slot()) {
         result1.push(value);
       }
     })();
 
-    const result2 = [];
+    const result2: string[] = [];
     let secondPromise = (async () => {
       for await (const value of slot()) {
         result2.push(value);
       }
     })();
 
-    const result3 = [];
+    const result3: string[] = [];
     let thirdPromise = (async () => {
       for await (const value of slot()) {
         result3.push(value);
@@ -91,23 +91,23 @@ describe("slot", () => {
 
   it("should be able to notify multiple listeners using the 'value' field", async (t) => {
     const array = ["A", "B", "C", "D"];
-    const slot = agen.slot();
+    const slot = agen.slot<string>();
 
-    const result1 = [];
+    const result1: string[] = [];
     let firstPromise = (async () => {
       for await (const value of slot()) {
         result1.push(value);
       }
     })();
 
-    const result2 = [];
+    const result2: string[] = [];
     let secondPromise = (async () => {
       for await (const value of slot()) {
         result2.push(value);
       }
     })();
 
-    const result3 = [];
+    const result3: string[] = [];
     let thirdPromise = (async () => {
       for await (const value of slot()) {
         result3.push(value);

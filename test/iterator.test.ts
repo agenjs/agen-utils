@@ -1,15 +1,16 @@
 import { describe, it, expect } from "./deps.ts";
 import agen from "../index.ts";
+import type { Observer } from "@agen/utils";
 
 describe("iterator()", () => {
-  it("iterator(o) [without callbacks] should iterate over non-synchronized values", async () => {
+  it("iterator(o : Observer<string>) [without callbacks] should iterate over non-synchronized values", async () => {
     await test([], []);
     await test([""], [""]);
     await test(["a"], ["a"]);
     await test(["a", "b", "c"], ["a", "b", "c"]);
     await test(["a", "b", "c", "d", "d"], ["a", "b", "c", "d", "d"]);
-    async function test(strings, control) {
-      let f = agen.iterator((o) => {
+    async function test(strings: string[], control: string[]) {
+      let f = agen.iterator((o: Observer<string>) => {
         for (let str of strings) {
           o.next(str);
         }
@@ -23,14 +24,14 @@ describe("iterator()", () => {
     }
   });
 
-  it("iterator(o) [without callbacks]  - should iterate over async values without waiting for consumer", async () => {
+  it("iterator(o : Observer<string>) [without callbacks]  - should iterate over async values without waiting for consumer", async () => {
     await test([], []);
     await test([""], [""]);
     await test(["a"], ["a"]);
     await test(["a", "b", "c"], ["a", "b", "c"]);
     await test(["a", "b", "c", "d", "d"], ["a", "b", "c", "d", "d"]);
-    async function test(strings, control) {
-      let f = agen.iterator((o) => {
+    async function test(strings: string[], control: string[]) {
+      let f = agen.iterator((o: Observer<string>) => {
         (async () => {
           for (let str of strings) {
             // Don't wait for the consumer
@@ -49,14 +50,14 @@ describe("iterator()", () => {
     }
   });
 
-  it("iterator(o) [without callbacks]  - should iterate wity async provider and async consumer", async (t) => {
+  it("iterator(o : Observer<string>) [without callbacks]  - should iterate wity async provider and async consumer", async (t) => {
     await test([], []);
     await test([""], [""]);
     await test(["a"], ["a"]);
     await test(["a", "b", "c"], ["a", "b", "c"]);
     await test(["a", "b", "c", "d", "d"], ["a", "b", "c", "d", "d"]);
-    async function test(strings, control) {
-      let f = agen.iterator((o) => {
+    async function test(strings: string[], control: string[]) {
+      let f = agen.iterator((o: Observer<string>) => {
         (async () => {
           for (let str of strings) {
             // Don't wait for the consumer
@@ -76,14 +77,14 @@ describe("iterator()", () => {
     }
   });
 
-  it("iterator(o) [without callbacks]  - should iterate with syncrhonization between provider and consumer", async (t) => {
+  it("iterator(o : Observer<string>) [without callbacks]  - should iterate with syncrhonization between provider and consumer", async (t) => {
     await test([], []);
     await test([""], [""]);
     await test(["a"], ["a"]);
     await test(["a", "b", "c"], ["a", "b", "c"]);
     await test(["a", "b", "c", "d", "d"], ["a", "b", "c", "d", "d"]);
-    async function test(strings, control) {
-      let f = agen.iterator((o) => {
+    async function test(strings: string[], control: string[]) {
+      let f = agen.iterator((o: Observer<string>) => {
         (async () => {
           for (let str of strings) {
             // Wait for the consumer
@@ -103,15 +104,15 @@ describe("iterator()", () => {
     }
   });
 
-  it("iterator(o) [wit callbacks] should iterate over non-synchronized values", async (t) => {
+  it("iterator(o : Observer<string>) [wit callbacks] should iterate over non-synchronized values", async (t) => {
     await test([], []);
     await test([""], [""]);
     await test(["a"], ["a"]);
     await test(["a", "b", "c"], ["a", "b", "c"]);
     await test(["a", "b", "c", "d", "d"], ["a", "b", "c", "d", "d"]);
-    async function test(strings, control) {
+    async function test(strings: string[], control: string[]) {
       let notified = false;
-      let f = agen.iterator((o) => {
+      let f = agen.iterator((o: Observer<string>) => {
         for (let str of strings) {
           o.next(str);
         }
@@ -133,9 +134,9 @@ describe("iterator()", () => {
     await test(["a"], ["a"]);
     await test(["a", "b", "c"], ["a", "b", "c"]);
     await test(["a", "b", "c", "d", "d"], ["a", "b", "c", "d", "d"]);
-    async function test(strings, control) {
+    async function test(strings: string[], control: string[]) {
       let notified = false;
-      let f = agen.iterator((o) => {
+      let f = agen.iterator((o: Observer<string>) => {
         (async () => {
           for (let str of strings) {
             // Don't wait for the consumer
@@ -162,9 +163,9 @@ describe("iterator()", () => {
     await test(["a"], ["a"]);
     await test(["a", "b", "c"], ["a", "b", "c"]);
     await test(["a", "b", "c", "d", "d"], ["a", "b", "c", "d", "d"]);
-    async function test(strings, control) {
+    async function test(strings: string[], control: string[]) {
       let notified = false;
-      let f = agen.iterator((o) => {
+      let f = agen.iterator((o: Observer<string>) => {
         (async () => {
           for (let str of strings) {
             // Don't wait for the consumer
@@ -192,9 +193,9 @@ describe("iterator()", () => {
     await test(["a"], ["a"]);
     await test(["a", "b", "c"], ["a", "b", "c"]);
     await test(["a", "b", "c", "d", "d"], ["a", "b", "c", "d", "d"]);
-    async function test(strings, control) {
+    async function test(strings: string[], control: string[]) {
       let notified = false;
-      let f = agen.iterator((o) => {
+      let f = agen.iterator((o: Observer<string>) => {
         (async () => {
           for (let str of strings) {
             // Wait for the consumer

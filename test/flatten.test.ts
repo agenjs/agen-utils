@@ -3,14 +3,14 @@ import agen from "../index.ts";
 
 describe("flatten()", () => {
   it("transforms embedded iterables to a flat stream of elements", async () => {
-    const f = agen.flatten();
+    const f = agen.flatten<string>();
     const list = [
       "a",
       ["b", [["c", "d"], [["e"]], "f"], "g"],
       ["h", [["i"], "j"], "k"],
     ];
     const control = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"];
-    const traces = [];
+    const traces: string[] = [];
     for await (let v of f(list)) {
       traces.push(v);
     }

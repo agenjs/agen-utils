@@ -3,7 +3,11 @@ import agen from "../index.ts";
 describe("series(splitter) ", () => {
   it("should split sequence of values to series", async () => {
     // See https://en.wikipedia.org/wiki/Car_of_the_Year
-    const cars = [
+    type CarInfo = {
+      year: number;
+      name: string;
+    };
+    const cars: CarInfo[] = [
       { year: 2005, name: "Audi A6" },
       { year: 2006, name: "BMW 3 Series" },
       { year: 2006, name: "Porsche Cayman S" },
@@ -23,17 +27,17 @@ describe("series(splitter) ", () => {
       { year: 2009, name: "Fiat Nuova 500" },
     ];
 
-    let prevYear;
+    let prevYear: number | undefined;
     // Split cars by year
-    const f = agen.series((v, i) => {
+    const f = agen.series((v: CarInfo, i: number) => {
       const split = prevYear && prevYear !== v.year;
       prevYear = v.year;
       return split;
     });
 
-    const result = [];
+    const result: CarInfo[][] = [];
     for await (let serie of f(cars)) {
-      const batch = [];
+      const batch: CarInfo[] = [];
       result.push(batch);
       for await (let car of serie) {
         batch.push(car);

@@ -1,3 +1,5 @@
+export type * from "./index.d.ts";
+
 export { default as asIterator } from "./asIterator.js";
 export { default as batch } from "./batch.js";
 export { default as compose } from "./compose.js";

@@ -1,5 +1,6 @@
 import { describe, it, expect } from "./deps.ts";
 import agen from "../index.ts";
+import { delay, toAsyncIterator } from "./toAsyncIterator.ts";
 
 const list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"];
 
@@ -11,7 +12,7 @@ describe("multiplexer()", () => {
     const promises = [];
     const N = 3;
     for (let i = 0; i < N; i++) {
-      const array = [];
+      const array: string[] = [];
       results.push(array);
       promises.push(
         (async (array) => {
@@ -27,17 +28,4 @@ describe("multiplexer()", () => {
     const control = Array.from({ length: N }).map((_) => [...list]);
     expect(results).toEqual(control);
   });
-
-  async function* toAsyncIterator(list, action) {
-    let idx = 0;
-    for (let value of list) {
-      action && (await action(value, idx++));
-      yield value;
-      await delay(5);
-    }
-  }
-
-  async function delay(timeout = 10) {
-    await new Promise((r) => setTimeout(r, timeout));
-  }
 });
