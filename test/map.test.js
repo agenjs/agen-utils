@@ -1,5 +1,5 @@
-import { describe, it, expect } from "./deps.js";
-import agen from "../index.js";
+import { describe, it, expect } from "./deps.ts";
+import agen from "../index.ts";
 
 describe("map", () => {
   it("should transform initial elements to new ones", async () => {

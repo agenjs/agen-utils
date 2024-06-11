@@ -1,5 +1,5 @@
-import { describe, it, expect } from "./deps.js";
-import agen from "../index.js";
+import { describe, it, expect } from "./deps.ts";
+import agen from "../index.ts";
 
 describe("filter(accept)", () => {
   it("returns values accepted by the specified function", async () => {

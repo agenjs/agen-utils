@@ -1,5 +1,5 @@
-import { describe, it, expect } from "./deps.js";
-import agen from "../index.js";
+import { describe, it, expect } from "./deps.ts";
+import agen from "../index.ts";
 describe("series(splitter) ", () => {
   it("should split sequence of values to series", async () => {
     // See https://en.wikipedia.org/wiki/Car_of_the_Year
