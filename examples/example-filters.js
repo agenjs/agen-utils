@@ -1,4 +1,4 @@
-import agen from '../index.js';
+import * as agen from '../dist/index.js';
 
 const list = [
   'First Message',

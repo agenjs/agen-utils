@@ -1,4 +1,4 @@
-import agen from '../index.js';
+import * as agen from '../dist/index.js';
 
 // Original data to iterate over:
 const list = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'];

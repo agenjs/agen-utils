@@ -1,4 +1,4 @@
-import agen from "../index.js";
+import * as agen from "../dist/index.js";
 
 // Generate new values:
 async function* toAsyncIterator(list, delay = 100) {

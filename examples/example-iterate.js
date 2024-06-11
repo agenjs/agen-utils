@@ -1,4 +1,4 @@
-import agen from '../index.js';
+import * as agen from '../dist/index.js';
 
 const delay = async (t) => await new Promise(r => setTimeout(r, t));
 

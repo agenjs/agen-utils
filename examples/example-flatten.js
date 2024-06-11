@@ -1,4 +1,4 @@
-import agen from '../index.js';
+import * as agen from '../dist/index.js';
 
 const list = ['a', ['b', [['c', 'd'], [['e']], 'f'], 'g'], ['h', [['i'], 'j'], 'k']];
 const f = agen.flatten();

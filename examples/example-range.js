@@ -1,4 +1,4 @@
-import agen from '../index.js';
+import * as agen from '../dist/index.js';
 
 const f = agen.range(1, 3);
 const list = ['a', 'b', 'c', 'd', 'e', 'f']

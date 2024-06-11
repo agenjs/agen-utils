@@ -1,12 +1,12 @@
-import agen from '../index.js';
+import * as agen from "../dist/index.js";
 
 let prevYear;
 // Split cars by year
 const f = agen.series((v, i) => {
-  const split = prevYear && (prevYear !== v.year);
+  const split = prevYear && prevYear !== v.year;
   prevYear = v.year;
   return split;
-})
+});
 
 // See https://en.wikipedia.org/wiki/Car_of_the_Year
 const cars = [
@@ -29,9 +29,9 @@ const cars = [
   { year: 2009, name: "Fiat Nuova 500" },
 ];
 for await (let serie of f(cars)) {
-  console.log('----------------------');
+  console.log("----------------------");
   for await (let car of serie) {
-    console.log('-', car.year, car.name);
+    console.log("-", car.year, car.name);
   }
 }
 // Output:

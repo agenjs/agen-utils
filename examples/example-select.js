@@ -1,4 +1,4 @@
-import agen from '../index.js';
+import * as agen from '../dist/index.js';
 
 const firstName = agen.slot("John");
 const lastName = agen.slot("Smith");

@@ -1,4 +1,4 @@
-import agen from '../index.js';
+import * as agen from '../dist/index.js';
 
 // Prepare the mapping function
 const f = agen.each(
