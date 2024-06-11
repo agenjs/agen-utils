@@ -1,4 +1,4 @@
-import listen from "./listen.js";
+import listen from "./listen.ts";
 
 export default function listenAll(generators = [], observer = (v) => v) {
   if (typeof observer === "function") observer = { next: observer };

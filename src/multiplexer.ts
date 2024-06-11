@@ -1,5 +1,5 @@
-import iterator from "./iterator.js";
-import listen from "./listen.js";
+import iterator from "./iterator.ts";
+import listen from "./listen.ts";
 
 export default function multiplexer(it, newQueue, awaitNew) {
   let list = [],

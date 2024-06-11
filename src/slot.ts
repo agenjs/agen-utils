@@ -1,8 +1,8 @@
-import compose from "./compose.js";
-import fin from "./fin.js";
-import iterator from "./iterator.js";
-import multiplexer from "./multiplexer.js";
-import newSkipQueue from "./newSkipQueue.js";
+import compose from "./compose.ts";
+import fin from "./fin.ts";
+import iterator from "./iterator.ts";
+import multiplexer from "./multiplexer.ts";
+import newSkipQueue from "./newSkipQueue.ts";
 
 export default function slot(value, newQueue = newSkipQueue) {
   let resolve,

@@ -1,5 +1,5 @@
-import listenAll from "./listenAll.js";
-import slot from "./slot.js";
+import listenAll from "./listenAll.ts";
+import slot from "./slot.ts";
 
 export default function select(generators = [], transform = (v) => v) {
   const s = slot();

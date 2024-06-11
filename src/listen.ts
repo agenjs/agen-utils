@@ -1,4 +1,4 @@
-import asIterator from "./asIterator.js";
+import asIterator from "./asIterator.ts";
 
 export default function listen(it, observer) {
   let done = false;

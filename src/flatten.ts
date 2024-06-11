@@ -1,4 +1,4 @@
-import asIterator from "./asIterator.js";
+import asIterator from "./asIterator.ts";
 
 export default function flatten() {
   return async function* exp(it) {

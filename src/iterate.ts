@@ -1,4 +1,4 @@
-import iterator from "./iterator.js";
+import iterator from "./iterator.ts";
 export default function iterate(init) {
   return iterator(init)();
 }
