@@ -1,6 +1,6 @@
 import { describe, it, expect } from "./deps.ts";
-import agen from "../index.ts";
-import { toAsyncIterator } from "./toAsyncIterator.ts";
+import * as agen from "../src/index.ts";
+import { toAsyncIterator } from "./test-utils.ts";
 
 const list = ["a", "d", "e", "f", "g", "k", "l", "m", "p"];
 

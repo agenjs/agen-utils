@@ -1,5 +1,5 @@
 import { describe, it, expect } from "./deps.ts";
-import agen from "../index.ts";
+import * as agen from "../src/index.ts";
 
 describe("batch(size)", async () => {
   it("should transform sequence of elements to batches", async () => {

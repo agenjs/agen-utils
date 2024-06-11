@@ -1,6 +1,6 @@
 import { describe, it, expect } from "./deps.ts";
-import agen from "../index.ts";
-import { toAsyncIterator } from "./toAsyncIterator.ts";
+import * as agen from "../src/index.ts";
+import { toAsyncIterator } from "./test-utils.ts";
 
 const list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"];
 
@@ -77,5 +77,3 @@ describe("fin(action)", () => {
     expect(count).toBe(breakIdx);
   });
 });
-
-

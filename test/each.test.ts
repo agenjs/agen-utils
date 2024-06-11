@@ -1,5 +1,5 @@
 import { describe, it, expect } from "./deps.ts";
-import agen from "../index.ts";
+import * as agen from "../src/index.ts";
 
 describe("each(before, after)", () => {
   it("sync each(before, after) returns a generator performing additional actions before and after each item", async () => {

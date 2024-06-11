@@ -1,5 +1,5 @@
 import { describe, it, expect } from "./deps.ts";
-import agen from "../index.ts";
+import * as agen from "../src/index.ts";
 import type { Observer } from "@agen/utils";
 
 describe("iterator()", () => {

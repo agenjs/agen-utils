@@ -1,5 +1,5 @@
 import { describe, it, expect } from "./deps.ts";
-import agen from "../index.ts";
+import * as agen from "../src/index.ts";
 
 describe("compose(...methods)", async () => {
   it("transforms a sequence of async generators to one", async () => {

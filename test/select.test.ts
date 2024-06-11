@@ -1,5 +1,5 @@
 import { describe, it, expect } from "./deps.ts";
-import agen from "../index.ts";
+import * as agen from "../src/index.ts";
 describe("select", () => {
   it("should be able to create a new slot using an array of iterators", async (t) => {
     const firstName = agen.slot("John");
