@@ -13,16 +13,19 @@
   },
   "type": "module",
   "files": [
-    "dist/**/*.js",
-    "dist/**/*.ts",
-    "src/**/*.js",
-    "src/**/*.ts"
+    "dist",
+    "src"
   ],
-  "main": "src/index.js",
-  "types": "dist/index.d.ts",
-  "module": "dist/index.js",
-  "jsdelivr": "dist/index.js",
-  "unpkg": "dist/index.js",
+  "module": "./dist/index.js",
+  "main": "./dist/index.js",
+  "jsdelivr": "./dist/index.js",
+  "unpkg": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/agenjs/agen-utils.git"
