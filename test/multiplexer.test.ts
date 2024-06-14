@@ -1,5 +1,5 @@
 import { describe, it, expect } from "./deps.ts";
-import * as agen from "../src/index.ts";
+import { multiplexer } from "../src/index.ts";
 import { delay, toAsyncIterator } from "./test-utils.ts";
 
 const list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"];
@@ -7,7 +7,7 @@ const list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"];
 describe("multiplexer()", () => {
   it("multiplexer(init) should add multiple reader for one generator", async () => {
     const it = toAsyncIterator(list);
-    const f = agen.multiplexer(it);
+    const f = multiplexer(it);
     let results = [];
     const promises = [];
     const N = 3;

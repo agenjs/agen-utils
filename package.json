@@ -19,7 +19,7 @@
     "src/**/*.ts"
   ],
   "main": "src/index.js",
-  "types": "src/index.d.ts",
+  "types": "dist/index.d.ts",
   "module": "dist/index.js",
   "jsdelivr": "dist/index.js",
   "unpkg": "dist/index.js",
@@ -28,7 +28,7 @@
     "url": "https://github.com/agenjs/agen-utils.git"
   },
   "scripts": {
-    "build": "rm -rf dist && tsup && cp ./src/index.d.ts ./dist/",
+    "build": "rm -rf dist && tsup",
     "zip": "zip -j dist/agen-utils.zip -- LICENSE README.md dist/index.js dist/index.d.ts",
     "watch": "tsup --watch sandbox.ts",
     "clean": "rm -rf dist",
@@ -42,6 +42,8 @@
     "access": "public"
   },
   "devDependencies": {
+    "@statewalker/eslint-config": "*",
+    "@statewalker/typescript-config": "*",
     "@types/node": "^20.11.16",
     "eslint": "^8.56.0",
     "expect.js": "^0.3.1",

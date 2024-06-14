@@ -1,6 +1,5 @@
 import { describe, it, expect } from "./deps.ts";
-import * as agen from "../src/index.ts";
-import type { Observer } from "@agen/utils";
+import { type Observer, iterator } from "../src/index.ts";
 
 describe("iterator()", () => {
   it("iterator(o : Observer<string>) [without callbacks] should iterate over non-synchronized values", async () => {
@@ -10,14 +9,14 @@ describe("iterator()", () => {
     await test(["a", "b", "c"], ["a", "b", "c"]);
     await test(["a", "b", "c", "d", "d"], ["a", "b", "c", "d", "d"]);
     async function test(strings: string[], control: string[]) {
-      let f = agen.iterator((o: Observer<string>) => {
-        for (let str of strings) {
+      const f = iterator((o: Observer<string>) => {
+        for (const str of strings) {
           o.next(str);
         }
         o.complete();
       });
-      let list = [];
-      for await (let str of f()) {
+      const list = [];
+      for await (const str of f()) {
         list.push(str);
       }
       expect(list).toEqual(control);
@@ -31,9 +30,9 @@ describe("iterator()", () => {
     await test(["a", "b", "c"], ["a", "b", "c"]);
     await test(["a", "b", "c", "d", "d"], ["a", "b", "c", "d", "d"]);
     async function test(strings: string[], control: string[]) {
-      let f = agen.iterator((o: Observer<string>) => {
+      const f = iterator((o: Observer<string>) => {
         (async () => {
-          for (let str of strings) {
+          for (const str of strings) {
             // Don't wait for the consumer
             o.next(str);
             await new Promise((r) => setTimeout(r, Math.random() * 10));
@@ -42,8 +41,8 @@ describe("iterator()", () => {
         })();
       });
 
-      let list = [];
-      for await (let str of f()) {
+      const list = [];
+      for await (const str of f()) {
         list.push(str);
       }
       expect(list).toEqual(control);
@@ -57,9 +56,9 @@ describe("iterator()", () => {
     await test(["a", "b", "c"], ["a", "b", "c"]);
     await test(["a", "b", "c", "d", "d"], ["a", "b", "c", "d", "d"]);
     async function test(strings: string[], control: string[]) {
-      let f = agen.iterator((o: Observer<string>) => {
+      const f = iterator((o: Observer<string>) => {
         (async () => {
-          for (let str of strings) {
+          for (const str of strings) {
             // Don't wait for the consumer
             o.next(str);
             await new Promise((r) => setTimeout(r, Math.random() * 10));
@@ -68,8 +67,8 @@ describe("iterator()", () => {
         })();
       });
 
-      let list = [];
-      for await (let str of f()) {
+      const list = [];
+      for await (const str of f()) {
         list.push(str);
         await new Promise((r) => setTimeout(r, Math.random() * 10));
       }
@@ -84,9 +83,9 @@ describe("iterator()", () => {
     await test(["a", "b", "c"], ["a", "b", "c"]);
     await test(["a", "b", "c", "d", "d"], ["a", "b", "c", "d", "d"]);
     async function test(strings: string[], control: string[]) {
-      let f = agen.iterator((o: Observer<string>) => {
+      const f = iterator((o: Observer<string>) => {
         (async () => {
-          for (let str of strings) {
+          for (const str of strings) {
             // Wait for the consumer
             await o.next(str);
             await new Promise((r) => setTimeout(r, Math.random() * 10));
@@ -95,8 +94,8 @@ describe("iterator()", () => {
         })();
       });
 
-      let list = [];
-      for await (let str of f()) {
+      const list = [];
+      for await (const str of f()) {
         list.push(str);
         await new Promise((r) => setTimeout(r, Math.random() * 10));
       }
@@ -112,15 +111,15 @@ describe("iterator()", () => {
     await test(["a", "b", "c", "d", "d"], ["a", "b", "c", "d", "d"]);
     async function test(strings: string[], control: string[]) {
       let notified = false;
-      let f = agen.iterator((o: Observer<string>) => {
-        for (let str of strings) {
+      const f = iterator((o: Observer<string>) => {
+        for (const str of strings) {
           o.next(str);
         }
         o.complete();
         return () => (notified = true);
       });
-      let list = [];
-      for await (let str of f()) {
+      const list = [];
+      for await (const str of f()) {
         list.push(str);
       }
       expect(list).toEqual(control);
@@ -136,9 +135,9 @@ describe("iterator()", () => {
     await test(["a", "b", "c", "d", "d"], ["a", "b", "c", "d", "d"]);
     async function test(strings: string[], control: string[]) {
       let notified = false;
-      let f = agen.iterator((o: Observer<string>) => {
+      const f = iterator((o: Observer<string>) => {
         (async () => {
-          for (let str of strings) {
+          for (const str of strings) {
             // Don't wait for the consumer
             o.next(str);
             await new Promise((r) => setTimeout(r, Math.random() * 10));
@@ -148,8 +147,8 @@ describe("iterator()", () => {
         return () => (notified = true);
       });
 
-      let list = [];
-      for await (let str of f()) {
+      const list = [];
+      for await (const str of f()) {
         list.push(str);
       }
       expect(list).toEqual(control);
@@ -165,9 +164,9 @@ describe("iterator()", () => {
     await test(["a", "b", "c", "d", "d"], ["a", "b", "c", "d", "d"]);
     async function test(strings: string[], control: string[]) {
       let notified = false;
-      let f = agen.iterator((o: Observer<string>) => {
+      const f = iterator((o: Observer<string>) => {
         (async () => {
-          for (let str of strings) {
+          for (const str of strings) {
             // Don't wait for the consumer
             o.next(str);
             await new Promise((r) => setTimeout(r, Math.random() * 10));
@@ -177,8 +176,8 @@ describe("iterator()", () => {
         return () => (notified = true);
       });
 
-      let list = [];
-      for await (let str of f()) {
+      const list = [];
+      for await (const str of f()) {
         list.push(str);
         await new Promise((r) => setTimeout(r, Math.random() * 10));
       }
@@ -195,9 +194,9 @@ describe("iterator()", () => {
     await test(["a", "b", "c", "d", "d"], ["a", "b", "c", "d", "d"]);
     async function test(strings: string[], control: string[]) {
       let notified = false;
-      let f = agen.iterator((o: Observer<string>) => {
+      const f = iterator((o: Observer<string>) => {
         (async () => {
-          for (let str of strings) {
+          for (const str of strings) {
             // Wait for the consumer
             await o.next(str);
             await new Promise((r) => setTimeout(r, Math.random() * 10));
@@ -207,8 +206,8 @@ describe("iterator()", () => {
         return () => (notified = true);
       });
 
-      let list = [];
-      for await (let str of f()) {
+      const list = [];
+      for await (const str of f()) {
         list.push(str);
         await new Promise((r) => setTimeout(r, Math.random() * 10));
       }

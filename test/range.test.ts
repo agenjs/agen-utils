@@ -1,5 +1,5 @@
 import { describe, it, expect } from "./deps.ts";
-import * as agen from "../src/index.ts";
+import { range } from "../src/index.ts";
 import { toAsyncIterator } from "./test-utils.ts";
 
 const list = ["a", "d", "e", "f", "g", "k", "l", "m", "p"];
@@ -15,7 +15,7 @@ describe("range", () => {
     const from = 2;
     const count = 3;
     let idx = 0;
-    const f = agen.range(from, count);
+    const f = range(from, count);
     for await (let value of f(provider())) {
       expect(value).toEqual(list[from + idx]);
       idx++;
@@ -130,7 +130,7 @@ describe("range", () => {
   ) {
     it(msg, async (t) => {
       const result = [];
-      const f = agen.range(idx, count);
+      const f = range(idx, count);
       for await (let n of f(list)) {
         result.push(n);
       }

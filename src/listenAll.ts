@@ -1,28 +1,15 @@
-import listen from "./listen.ts";
+import { type IterableLike, type Observer, toObserver } from "./types.ts";
+import { listenArray } from "./listenArray.ts";
+import { listenRecords } from "./listenRecords.ts";
 
-export default function listenAll(generators = [], observer = (v) => v) {
-  if (typeof observer === "function") observer = { next: observer };
-  let select = (v) => [...v];
-  if (!Array.isArray(generators)) {
-    const entries = Object.entries(generators);
-    generators = entries.map((e) => e[1]);
-    const keys = entries.map((e) => e[0]);
-    select = (values) =>
-      keys.reduce((obj, key, idx) => ((obj[key] = values[idx]), obj), {});
-  }
-  const values = new Array(generators.length);
-  const registrations = generators.map((gen, idx) =>
-    listen(gen, {
-      next: async (value) => {
-        values[idx] = value;
-        for (let i = 0; i < values.length; i++) {
-          if (values[i] === undefined) return;
-        }
-        return await observer.next(select(await Promise.all(values)));
-      },
-      complete: observer.complete,
-      error: observer.error,
-    })
-  );
-  return () => registrations.forEach((r) => r());
+export function listenAll<T>(
+  generators: IterableLike<T>[] | Record<keyof T, IterableLike<T[keyof T]>>[],
+  observer: ((val: T) => void | Promise<void>) | Observer<T>
+): () => void {
+  return Array.isArray(generators)
+    ? listenArray(
+        generators as IterableLike<T>[],
+        toObserver(observer) as Observer<T[]>
+      )
+    : listenRecords(generators, observer);
 }

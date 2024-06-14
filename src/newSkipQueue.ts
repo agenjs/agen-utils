@@ -1,7 +1,10 @@
-export default function newSkipQueue() {
-  let s, slot;
+export function newSkipQueue<T = any>() {
+  let s, slot: T | undefined;
   return {
     shift: () => ((s = slot), (slot = undefined), s),
-    push: (s) => (slot && slot.notify && slot.notify(false), (slot = s)),
+    push: (s: T) => {
+      slot && (slot as any).notify?.(false);
+      slot = s;
+    },
   };
 }

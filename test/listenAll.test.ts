@@ -1,5 +1,5 @@
 import { describe, it, expect } from "./deps.ts";
-import * as agen from "../src/index.ts";
+import { IterableLike, listenAll } from "../src/index.ts";
 
 describe("listenAll", () => {
   it("listenAll should combine multiple iterator", async (t) => {
@@ -19,7 +19,8 @@ describe("listenAll", () => {
 
     async function test(lists: string[][], control: string[][]) {
       const results: string[] = [];
-      const cleanup = agen.listenAll(lists.map(toAsyncIterator), (v: string) =>
+      const iterators: IterableLike<string>[]  = lists.map(toAsyncIterator)
+      const cleanup = listenAll(iterators, (v: string) =>
         results.push(v)
       );
       await new Promise((r) => setTimeout(r, 100));

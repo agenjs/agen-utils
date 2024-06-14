@@ -1,10 +1,10 @@
 import { describe, it, expect } from "./deps.ts";
-import * as agen from "../src/index.ts";
+import { slot, select, listen } from "../src/index.ts";
 describe("select", () => {
   it("should be able to create a new slot using an array of iterators", async (t) => {
-    const firstName = agen.slot("John");
-    const lastName = agen.slot("Smith");
-    const fullName = agen.select(
+    const firstName = slot("John");
+    const lastName = slot("Smith");
+    const fullName = select<[string, string]>(
       [firstName, lastName],
       ([first = "", last = ""]) => {
         return `${first} ${last}`;
@@ -15,9 +15,9 @@ describe("select", () => {
   });
 
   it("should be able to create a new slot using objects with iterator values", async (t) => {
-    const firstName = agen.slot("John");
-    const lastName = agen.slot("Smith");
-    const fullName = agen.select(
+    const firstName = slot("John");
+    const lastName = slot("Smith");
+    const fullName = select(
       {
         firstName,
         lastName,
@@ -30,9 +30,9 @@ describe("select", () => {
   });
 
   it("should be able to update values when one of the original iterators change its value", async (t) => {
-    const firstName = agen.slot("John");
-    const lastName = agen.slot("Smith");
-    const fullName = agen.select(
+    const firstName = slot("John");
+    const lastName = slot("Smith");
+    const fullName = select(
       {
         firstName,
         lastName,
@@ -43,23 +43,23 @@ describe("select", () => {
     await new Promise((r) => setTimeout(r, 1));
     expect(fullName.value).toBe("John Smith");
 
-    await firstName.next("JOHN");
+    await firstName.observer.next("JOHN");
     expect(fullName.value).toBe("JOHN Smith");
 
-    await lastName.next("SMITH");
+    await lastName.observer.next("SMITH");
     expect(fullName.value).toBe("JOHN SMITH");
   });
 
   it("should be able to listen slots with transformation functions", async (t) => {
-    const firstName = agen.slot("John");
-    const lastName = agen.slot("Smith");
-    const fullName = agen.select<
-      {
-        firstName: string;
-        lastName: string;
-      },
-      string
-    >(
+    const firstName = slot("John");
+    const lastName = slot("Smith");
+    const fullName = select<
+    {
+      firstName: string;
+      lastName: string;
+    },
+    string
+  >(
       {
         firstName,
         lastName,
@@ -69,7 +69,7 @@ describe("select", () => {
     );
 
     const values: string[] = [];
-    const cleanup = agen.listen(
+    const cleanup = listen(
       fullName((s: string) => `*${(s || "").toUpperCase()}*`),
       (v: string) => {
         values.push(v);

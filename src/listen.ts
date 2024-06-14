@@ -1,25 +1,32 @@
-import asIterator from "./asIterator.ts";
+import {
+  type IterableLike,
+  type Observer,
+  toObserver,
+  toAsyncIterator,
+} from "./types.ts";
 
-export default function listen(it, observer) {
+export function listen<T, E = Error>(
+  params: IterableLike<T>,
+  observer: ((val: T) => void | Promise<void>) | Observer<T, E>
+): () => void {
   let done = false;
+  let it: AsyncGenerator<T, void>;
   (async () => {
+    const o = toObserver<T, E>(observer);
     try {
-      it = asIterator(it);
-      if (typeof observer === "function") {
-        observer = { next: observer };
-      }
+      it = toAsyncIterator<T>(params);
       let slot;
       while (!done && (slot = await it.next())) {
         if (done || slot.done) break;
-        await observer.next(await slot.value);
+        await o.next(await slot.value);
       }
-      observer.complete && (await observer.complete());
+      o.complete && (await o.complete());
     } catch (error) {
-      observer.error && (await observer.error(error));
+      o.error && (await o.error(error as E));
     }
   })();
   return () => {
     done = true;
-    it.return && it.return();
+    it && it.return && it.return();
   };
 }

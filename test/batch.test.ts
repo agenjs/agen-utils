@@ -1,5 +1,5 @@
 import { describe, it, expect } from "./deps.ts";
-import * as agen from "../src/index.ts";
+import { batch } from "../src/batch.ts";
 
 describe("batch(size)", async () => {
   it("should transform sequence of elements to batches", async () => {
@@ -11,7 +11,7 @@ describe("batch(size)", async () => {
       ["j", "k"],
     ];
     let i = 0;
-    const f = agen.batch(3);
+    const f = batch(3);
     for await (let b of f(list)) {
       expect(b).toEqual(results[i++]);
     }

@@ -1,10 +1,10 @@
 import { describe, it, expect } from "./deps.ts";
-import * as agen from "../src/index.ts";
+import { compose, each, map, filter } from "../src/index.ts";
 
 describe("each(before, after)", () => {
   it("sync each(before, after) returns a generator performing additional actions before and after each item", async () => {
     const traces = [];
-    const f = agen.each<string>(
+    const f = each<string>(
       (v: string, i: number) => traces.push(`- before [${i}:${v}]`),
       (v: string, i: number) => traces.push(`- after [${i}:${v}]`)
     );
@@ -29,7 +29,7 @@ describe("each(before, after)", () => {
     const traces = [];
     const randomPause = async (t: number) =>
       await new Promise((r) => setTimeout(r, t));
-    const f = agen.each(
+    const f = each(
       async (v: string, i: number) => {
         await randomPause(20);
         traces.push(`- before [${i}:${v}]`);
@@ -60,7 +60,7 @@ describe("each(before, after)", () => {
     const traces = [];
     const randomPause = async (t: number) =>
       await new Promise((r) => setTimeout(r, t));
-    const f = agen.each(
+    const f = each(
       async (v: string, i: number) => {
         await randomPause(20);
         traces.push(`- before [${i}:${v}]`);
@@ -90,14 +90,14 @@ describe("each(before, after)", () => {
     const result = [];
 
     // compose method allows to combine multiple operations in one:
-    const f = agen.compose(
-      agen.filter((_: string, i: number) => i % 2 == 0), // Filter only even values
-      agen.each(
+    const f = compose(
+      filter((_: string, i: number) => i % 2 == 0), // Filter only even values
+      each(
         // Prints "xml" tags
         (v: string) => result.push(`<${v}>`),
         (v: string) => result.push(`</${v}>`)
       ),
-      agen.map((v: string, i: number) => v.toUpperCase()) // Transforms characters to upper case
+      map((v: string, i: number) => v.toUpperCase()) // Transforms characters to upper case
     );
 
     // Define the original sequence to transform:

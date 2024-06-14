@@ -1,5 +1,5 @@
 import { describe, it, expect } from "./deps.ts";
-import * as agen from "../src/index.ts";
+import { series } from "../src/index.ts";
 describe("series(splitter) ", () => {
   it("should split sequence of values to series", async () => {
     // See https://en.wikipedia.org/wiki/Car_of_the_Year
@@ -29,7 +29,7 @@ describe("series(splitter) ", () => {
 
     let prevYear: number | undefined;
     // Split cars by year
-    const f = agen.series((v: CarInfo, i: number) => {
+    const f = series((v: CarInfo, i: number) => {
       const split = prevYear && prevYear !== v.year;
       prevYear = v.year;
       return split;

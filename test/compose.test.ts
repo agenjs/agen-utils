@@ -1,11 +1,11 @@
 import { describe, it, expect } from "./deps.ts";
-import * as agen from "../src/index.ts";
+import { filter, map, compose } from "../src/index.ts";
 
 describe("compose(...methods)", async () => {
   it("transforms a sequence of async generators to one", async () => {
-    const f = agen.compose(
-      agen.filter((v: string, i: number) => i % 2 == 0), // Filter values
-      agen.map((v: string, i: number) => v.toUpperCase()) // Transforms characters
+    const f = compose(
+      filter((v: string, i: number) => i % 2 == 0), // Filter values
+      map((v: string, i: number) => v.toUpperCase()) // Transforms characters
     );
     const list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"];
     const traces = [];

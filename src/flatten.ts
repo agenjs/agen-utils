@@ -1,11 +1,14 @@
-import asIterator from "./asIterator.ts";
+import { type IterableLike, toAsyncIterator } from "./types.ts";
 
-export default function flatten() {
-  return async function* exp(it) {
-    it = asIterator(it);
-    for await (let value of await it) {
+export function flatten<T>(): (
+  it: IterableLike<T | IterableLike<T>>
+) => AsyncGenerator<T> {
+  return async function* exp(
+    it: IterableLike<T | IterableLike<T>>
+  ): AsyncGenerator<T> {
+    for await (let value of await toAsyncIterator(it)) {
       if (typeof value === "object" && value) {
-        yield* exp(value);
+        yield* exp(value as IterableLike<T | IterableLike<T>>);
       } else {
         yield value;
       }

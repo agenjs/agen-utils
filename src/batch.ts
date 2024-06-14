@@ -1,7 +1,11 @@
-export default function batch(batchSize = 1) {
-  return async function* (it) {
-    let batch = [];
-    for await (let value of await it) {
+import { IterableLike, toAsyncIterator } from "./types";
+
+export function batch<T>(
+  batchSize: number = 1
+): (it: IterableLike<T>) => AsyncGenerator<T[]> {
+  return async function* (it: IterableLike<T>): AsyncGenerator<T[]> {
+    let batch: T[] = [];
+    for await (const value of toAsyncIterator(it)) {
       batch.push(value);
       if (batch.length === batchSize) {
         yield batch;
