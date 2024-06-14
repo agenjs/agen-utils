@@ -1,6 +1,5 @@
 export * from "./types.ts";
 
-// export * from "./asIterator.ts";
 export * from "./batch.ts";
 export * from "./compose.ts";
 export * from "./each.ts";

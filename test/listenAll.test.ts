@@ -19,7 +19,7 @@ describe("listenAll", () => {
 
     async function test(lists: string[][], control: string[][]) {
       const results: string[] = [];
-      const iterators: IterableLike<string>[] = lists.map(toAsyncIterator);
+      const iterators: IterableLike<string>[] = lists.map(toAsyncIteratorWithDelay);
       const cleanup = listenAll(iterators, (v: string) => {
         results.push(v);
       });
@@ -29,7 +29,7 @@ describe("listenAll", () => {
     }
   });
 
-  async function* toAsyncIterator<T>(list: T[]): AsyncGenerator<T> {
+  async function* toAsyncIteratorWithDelay<T>(list: T[]): AsyncGenerator<T> {
     const delay: number = 5;
     for await (const value of list) {
       await new Promise((r) => setTimeout(r, delay));

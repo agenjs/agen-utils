@@ -1,6 +1,6 @@
 import { describe, it, expect } from "./deps.ts";
 import { range } from "../src/index.ts";
-import { toAsyncIterator } from "./test-utils.ts";
+import { toAsyncIteratorWithDelay } from "./test-utils.ts";
 
 const list = ["a", "d", "e", "f", "g", "k", "l", "m", "p"];
 
@@ -59,63 +59,63 @@ describe("range", () => {
 
   test(
     "range async: should be able to return zero values (1)",
-    toAsyncIterator(list),
+    toAsyncIteratorWithDelay(list),
     5,
     0,
     []
   );
   test(
     "range async: should be able to return zero values (2)",
-    toAsyncIterator(list),
+    toAsyncIteratorWithDelay(list),
     0,
     0,
     []
   );
   test(
     "range async: should be able to return one value (1)",
-    toAsyncIterator(list),
+    toAsyncIteratorWithDelay(list),
     list.length - 1,
     1,
     ["p"]
   );
   test(
     "range async: should be able to return one value (2)",
-    toAsyncIterator(list),
+    toAsyncIteratorWithDelay(list),
     0,
     1,
     ["a"]
   );
   test(
     "range async: should be able to return one value (3)",
-    toAsyncIterator(list),
+    toAsyncIteratorWithDelay(list),
     3,
     1,
     ["f"]
   );
   test(
     "range async: should be able to return range from the end",
-    toAsyncIterator(list),
+    toAsyncIteratorWithDelay(list),
     0,
     1000,
     list
   );
   test(
     "range async: should be able to return a slice of the list",
-    toAsyncIterator(list),
+    toAsyncIteratorWithDelay(list),
     3,
     4,
     list.slice(3, 3 + 4)
   );
   test(
     "range async: should be able to return 3 values",
-    toAsyncIterator(list),
+    toAsyncIteratorWithDelay(list),
     list.length - 3,
     3,
     ["l", "m", "p"]
   );
   test(
     "range async: should be able to return all values",
-    toAsyncIterator(list),
+    toAsyncIteratorWithDelay(list),
     0,
     1000,
     list

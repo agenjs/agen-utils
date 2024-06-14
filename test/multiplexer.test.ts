@@ -1,12 +1,12 @@
 import { describe, it, expect } from "./deps.ts";
 import { multiplexer } from "../src/index.ts";
-import { delay, toAsyncIterator } from "./test-utils.ts";
+import { delay, toAsyncIteratorWithDelay } from "./test-utils.ts";
 
 const list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"];
 
 describe("multiplexer()", () => {
   it("multiplexer(init) should add multiple reader for one generator", async () => {
-    const it = toAsyncIterator(list);
+    const it = toAsyncIteratorWithDelay(list);
     const f = multiplexer(it);
     let results = [];
     const promises = [];

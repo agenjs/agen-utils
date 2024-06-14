@@ -1,6 +1,6 @@
 import { describe, it, expect } from "./deps.ts";
 import { fin } from "../src/index.ts";
-import { toAsyncIterator } from "./test-utils.ts";
+import { toAsyncIteratorWithDelay } from "./test-utils.ts";
 
 const list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"];
 
@@ -12,7 +12,7 @@ describe("fin(action)", () => {
       error = e;
       count = c;
     });
-    const it = toAsyncIterator<string>(list);
+    const it = toAsyncIteratorWithDelay<string>(list);
     for await (let v of f(it)) {
     }
     expect(error).toBe(undefined);
@@ -26,7 +26,7 @@ describe("fin(action)", () => {
       error = e;
       count = c;
     });
-    const it = toAsyncIterator(list);
+    const it = toAsyncIteratorWithDelay(list);
     let idx = 0;
     for await (let v of f(it)) {
       if (++idx === 5) break;
@@ -44,7 +44,7 @@ describe("fin(action)", () => {
       count = c;
     });
     const breakIdx = 5;
-    const it = toAsyncIterator(list, (value, idx) => {
+    const it = toAsyncIteratorWithDelay(list, (value, idx) => {
       if (idx === breakIdx) throw new Error("Hello, world");
     });
     try {
@@ -65,7 +65,7 @@ describe("fin(action)", () => {
       count = c;
     });
     const breakIdx = 5;
-    const it = toAsyncIterator(list);
+    const it = toAsyncIteratorWithDelay(list);
     let idx = 0;
     try {
       for await (let v of f(it)) {

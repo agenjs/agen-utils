@@ -7,7 +7,7 @@ export function range<T>(
   return async function* (it: IterableLike<T>) {
     let idx = 0;
     if (count <= 0) return;
-    for await (let value of toAsyncIterator(it)) {
+    for await (const value of toAsyncIterator(it)) {
       if (idx >= from) yield value;
       idx++;
       if (idx >= from + count) break;

@@ -1,4 +1,4 @@
-export async function* toAsyncIterator<T>(
+export async function* toAsyncIteratorWithDelay<T>(
   list: T[],
   action?: (value: T, index: number) => void | Promise<void>
 ): AsyncGenerator<T> {

@@ -1,4 +1,4 @@
-import { IterableLike, toAsyncIterator } from "./types";
+import { type IterableLike, toAsyncIterator } from "./types.ts";
 
 export function batch<T>(
   batchSize: number = 1

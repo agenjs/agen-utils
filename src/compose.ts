@@ -11,12 +11,3 @@ export function compose<O, I = any, T = I>(
     yield* toAsyncIterator<O>(f as IterableLike<O>);
   };
 }
-
-// export function pipe<A, B, C>(
-//   a: (it: IterableLike<A>) => IterableLike<B>,
-//   b: (it: IterableLike<B>) => IterableLike<C>
-// ): (it: IterableLike<A>) => AsyncGenerator<C> {
-//   return async function* (it: IterableLike<A>): AsyncGenerator<C> {
-//     yield* toAsyncIterator(b(a(it)));
-//   };
-// }
