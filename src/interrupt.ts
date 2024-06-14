@@ -5,8 +5,8 @@ import {
 } from "./types.ts";
 
 export function interrupt<T>(
-  before: undefined | AcceptFilter<T>,
-  after: undefined | AcceptFilter<T>
+  before: null | undefined | AcceptFilter<T>,
+  after?: null | undefined | AcceptFilter<T>
 ) {
   return async function* (it: IterableLike<T>) {
     let idx = 0;

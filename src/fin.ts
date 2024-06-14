@@ -1,6 +1,6 @@
 import { type IterableLike, toAsyncIterator } from "./types.ts";
 
-export function fin<E = Error, T = any>(
+export function fin<T = any, E = Error>(
   action: (error: E | undefined, idx: number) => unknown | Promise<unknown>
 ): (it: IterableLike<T>) => AsyncGenerator<T> {
   return async function* (it: IterableLike<T>) {

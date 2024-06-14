@@ -1,12 +1,8 @@
-import {
-  type AcceptFilter,
-  type IterableLike,
-  toAsyncIterator,
-} from "./types.ts";
+import { type IterableLike, toAsyncIterator } from "./types.ts";
 
 export function each<T>(
-  before: AcceptFilter<T>,
-  after: AcceptFilter<T>
+  before: undefined | ((val: T, idx: number) => unknown | Promise<unknown>),
+  after?: undefined | ((val: T, idx: number) => unknown | Promise<unknown>)
 ): (it: IterableLike<T>) => AsyncGenerator<T> {
   return async function* (it: IterableLike<T>) {
     let idx = 0;

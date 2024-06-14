@@ -29,10 +29,10 @@ describe("series(splitter) ", () => {
 
     let prevYear: number | undefined;
     // Split cars by year
-    const f = series((v: CarInfo, i: number) => {
+    const f = series<CarInfo>((v: CarInfo, i: number) => {
       const split = prevYear && prevYear !== v.year;
       prevYear = v.year;
-      return split;
+      return !!split;
     });
 
     const result: CarInfo[][] = [];

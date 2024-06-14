@@ -19,10 +19,10 @@ describe("listenAll", () => {
 
     async function test(lists: string[][], control: string[][]) {
       const results: string[] = [];
-      const iterators: IterableLike<string>[]  = lists.map(toAsyncIterator)
-      const cleanup = listenAll(iterators, (v: string) =>
-        results.push(v)
-      );
+      const iterators: IterableLike<string>[] = lists.map(toAsyncIterator);
+      const cleanup = listenAll(iterators, (v: string) => {
+        results.push(v);
+      });
       await new Promise((r) => setTimeout(r, 100));
       await cleanup();
       expect(results).toEqual(control);

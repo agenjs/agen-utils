@@ -8,7 +8,7 @@ import {
 
 export function multiplexer<T, E = Error>(
   it: IterableLike<T>,
-  newQueue: QueueFactory,
+  newQueue?: QueueFactory,
   awaitNew: boolean = false
 ) {
   let list: Observer<T, E>[] = [];

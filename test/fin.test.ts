@@ -8,7 +8,7 @@ describe("fin(action)", () => {
   it("fin(action) is called after iterations over all available data", async () => {
     let error: Error | undefined,
       count = 0;
-    const f = fin<Error, number>((e: Error, c: number) => {
+    const f = fin((e: undefined | Error, c: number) => {
       error = e;
       count = c;
     });
@@ -22,7 +22,7 @@ describe("fin(action)", () => {
   it("fin(action) is called after interrupted iterations", async () => {
     let error,
       count = 0;
-    const f = fin((e: Error, c: number) => {
+    const f = fin((e: undefined | Error, c: number) => {
       error = e;
       count = c;
     });
@@ -39,7 +39,7 @@ describe("fin(action)", () => {
     let catchedError: Error | undefined,
       error: Error | undefined,
       count = 0;
-    const f = fin((e: Error, c: number) => {
+    const f = fin((e: undefined | Error, c: number) => {
       error = e;
       count = c;
     });
@@ -60,7 +60,7 @@ describe("fin(action)", () => {
   it("fin(action) is called after execeptions throw by the caller (consumer)", async () => {
     let error: Error | undefined,
       count = 0;
-    const f = fin<Error, number>((e: Error, c: number) => {
+    const f = fin<string>((e: undefined | Error, c: number) => {
       error = e;
       count = c;
     });
