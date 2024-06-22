@@ -6,7 +6,7 @@ import {
 
 export function series<T, E = Error>(split: AcceptFilter<T>) {
   return async function* (
-    values: IterableLike<T>
+    values: IterableLike<T> | (() => IterableLike<T>)
   ): AsyncGenerator<AsyncGenerator<T>> {
     const it: AsyncGenerator<T> = toAsyncIterator<T>(values);
     if (!it) return;

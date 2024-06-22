@@ -1,16 +1,19 @@
-import { listenAll } from "./listenAll.ts";
-import { slot } from "./slot.ts";
-import { IterableLike } from "./types.ts";
+import { selectArray } from "./selectArray.ts";
+import { selectRecords } from "./selectRecords.ts";
+import type { IterableLike, Slot } from "./types.ts";
 
 export function select<T, R = T>(
-  generators: IterableLike<T>[] | Record<keyof T, IterableLike<T[keyof T]>>[],
-  transform: ((v: T[]) => R) | ((v: T) => R) = (v: any) => v as R
-) {
-  const s = slot<R>();
-  s.promise.finally(
-    listenAll(generators, async (v: any) => {
-      await s.observer.next(await transform(v));
-    })
-  );
-  return s;
+  generators:
+    | (IterableLike<T> | (() => IterableLike<T>))[]
+    | Record<
+        keyof T,
+        IterableLike<T[keyof T]> | (() => IterableLike<T[keyof T]>)
+      >,
+  transform: ((val: T[]) => R | Promise<R>) | ((val: T) => R | Promise<R>) = (
+    v: any
+  ) => v as R
+): Slot<R> {
+  return Array.isArray(generators)
+    ? selectArray(generators, transform as (val: T[]) => R | Promise<R>)
+    : selectRecords(generators, transform as (val: T) => R | Promise<R>);
 }

@@ -1,8 +1,8 @@
 import { listen } from "./listen.ts";
-import { type IterableLike, type Observer, toObserver } from "./types.ts";
+import { type IterableLike, type Observer, toAsyncIterator, toObserver } from "./types.ts";
 
 export function listenArray<T, E = Error>(
-  generators: IterableLike<T>[],
+  generators: (IterableLike<T> | (() => IterableLike<T>))[],
   observer:
     | ((val: T[]) => void | boolean | Promise<void | boolean>)
     | Observer<T[], E>
@@ -10,7 +10,7 @@ export function listenArray<T, E = Error>(
   const o = toObserver<T[], E>(observer);
   let values: T[] = new Array(generators.length);
   const registrations = generators.map((gen, idx) =>
-    listen<T, E>(gen, {
+    listen<T, E>(toAsyncIterator(gen), {
       next: async (value) => {
         values[idx] = value;
         for (let i = 0; i < values.length; i++) {

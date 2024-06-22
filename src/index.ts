@@ -19,5 +19,7 @@ export * from "./newSkipQueue.ts";
 export * from "./range.ts";
 export * from "./series.ts";
 export * from "./select.ts";
+export * from "./selectArray.ts";
+export * from "./selectRecords.ts";
 export * from "./slot.ts";
 export * from "./listenAll.ts";

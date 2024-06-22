@@ -3,7 +3,12 @@ import { listenArray } from "./listenArray.ts";
 import { listenRecords } from "./listenRecords.ts";
 
 export function listenAll<T>(
-  generators: IterableLike<T>[] | Record<keyof T, IterableLike<T[keyof T]>>,
+  generators:
+    | (IterableLike<T> | (() => IterableLike<T>))[]
+    | Record<
+        keyof T,
+        IterableLike<T[keyof T]> | (() => IterableLike<T[keyof T]>)
+      >,
   observer: ((val: T) => void | Promise<void>) | Observer<T>
 ): () => void {
   return Array.isArray(generators)

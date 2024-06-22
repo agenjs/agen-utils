@@ -43,7 +43,9 @@ export type Observable<T, E = Error> = (
  * The `observer` allows to push the next value, rise an error or interrupt iterations.
  * The `promise` allows to listen the end of all iterations.
  */
-export type Slot<T, E = Error> = (() => AsyncGenerator<T>) & {
+export type Slot<T, E = Error> = (<R = T>(
+  filter?: (value: T) => R
+) => AsyncGenerator<T>) & {
   value: T;
   done: boolean;
   promise: Promise<void>;

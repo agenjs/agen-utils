@@ -7,7 +7,7 @@ import {
 } from "./types.ts";
 
 export function multiplexer<T, E = Error>(
-  it: IterableLike<T>,
+  it: IterableLike<T> | (() => IterableLike<T>),
   newQueue?: QueueFactory,
   awaitNew: boolean = false
 ) {

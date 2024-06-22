@@ -6,7 +6,7 @@ import {
 } from "./types.ts";
 
 export function listen<T, E = Error>(
-  params: IterableLike<T>,
+  params: IterableLike<T> | (() => IterableLike<T>),
   observer: ((val: T) => void | Promise<void>) | Observer<T, E>
 ): () => void {
   let done = false;
