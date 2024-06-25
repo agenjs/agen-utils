@@ -4,7 +4,7 @@ export function compose<O, I = any, T = I>(
   ...list: ((
     it: IterableLike<T> | (() => IterableLike<T>)
   ) => IterableLike<T>)[]
-): (it: IterableLike<I> | (() => IterableLike<I>)) => AsyncGenerator<O> {
+): (it?: IterableLike<I> | (() => IterableLike<I>)) => AsyncGenerator<O> {
   return async function* (
     it: IterableLike<I> | (() => IterableLike<I>) = []
   ): AsyncGenerator<O> {
