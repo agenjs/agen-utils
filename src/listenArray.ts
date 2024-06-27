@@ -1,11 +1,16 @@
 import { listen } from "./listen.ts";
-import { type IterableLike, type Observer, toAsyncIterator, toObserver } from "./types.ts";
+import {
+  type IterableLike,
+  type Observer,
+  toAsyncIterator,
+  toObserver,
+} from "./types.ts";
 
 export function listenArray<T, E = Error>(
   generators: (IterableLike<T> | (() => IterableLike<T>))[],
   observer:
-    | ((val: T[]) => void | boolean | Promise<void | boolean>)
-    | Observer<T[], E>
+    | ((val: T[]) => unknown | Promise<unknown>)
+    | Partial<Observer<T[], E>>
 ): () => void {
   const o = toObserver<T[], E>(observer);
   let promises: Promise<T>[] = new Array(generators.length);

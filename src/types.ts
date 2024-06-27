@@ -53,20 +53,23 @@ export type Slot<T, E = Error> = (<R = T>(
 };
 
 export function toObserver<T, E = Error>(
-  observer:
-    | ((val: T) => void | boolean | Promise<void | boolean>)
-    | Observer<T, E>
+  observer: ((val: T) => unknown | Promise<unknown>) | Partial<Observer<T, E>>
 ): Observer<T, E> {
-  return typeof observer === "function"
-    ? {
-        next: async (val: T) => {
-          const result = await observer(val);
-          return result === undefined || !!result;
-        },
-        complete: () => true,
-        error: () => true,
-      }
-    : observer;
+  const o = (
+    typeof observer === "function"
+      ? {
+          next: observer,
+        }
+      : observer
+  ) as Partial<Observer<T, E>>;
+  return {
+    next: async (val: T) => {
+      const result = await o.next?.(val);
+      return result === undefined || !!result;
+    },
+    complete: o.complete ? o.complete.bind(o) : () => true,
+    error: o.error ? o.error.bind(o) : () => true,
+  } as Observer<T, E>;
 }
 
 export type AcceptFilter<T> = (
