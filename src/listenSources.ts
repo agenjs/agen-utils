@@ -2,18 +2,14 @@ import { compareArrays } from "./compareArrays.ts";
 import { listen } from "./listen.ts";
 import {
   type IterableLike,
-  type Observer,
+  type ObserverLike,
   toAsyncIterator,
   toObserver,
 } from "./types.ts";
 
 export function listenSources<T, E = Error>(
   sources: IterableLike<IterableLike<T>[]>,
-  observer:
-    | ((
-        val: (T | undefined)[]
-      ) => unknown | boolean | Promise<unknown | boolean>)
-    | Observer<(T | undefined)[], E>,
+  observer: ObserverLike<T, E>,
   equal: (
     first: (T | undefined)[],
     second: (T | undefined)[]
@@ -37,7 +33,7 @@ export function listenSources<T, E = Error>(
     }
     prevValues = values;
     return true;
-  }; 
+  };
   return listen(sources, {
     ...o,
     next: async (iterators) => {

@@ -52,8 +52,12 @@ export type Slot<T, E = Error> = (<R = T>(
   observer: Observer<T, E>;
 };
 
+export type ObserverLike<T, E = Error> =
+  | ((val: T | undefined) => unknown | Promise<unknown>)
+  | Partial<Observer<T, E>>;
+
 export function toObserver<T, E = Error>(
-  observer: ((val: T) => unknown | Promise<unknown>) | Partial<Observer<T, E>>
+  observer: ObserverLike<T, E>
 ): Observer<T, E> {
   const o = (
     typeof observer === "function"

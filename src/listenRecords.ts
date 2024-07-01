@@ -1,14 +1,14 @@
 import { listenArray } from "./listenArray.ts";
 import {
   type IterableLike,
-  type Observer,
+  type ObserverLike,
   toAsyncIterator,
   toObserver,
 } from "./types.ts";
 
 export function listenRecords<T, E = Error, K extends keyof T = keyof T>(
   generators: Record<K, IterableLike<T[K]> | (() => IterableLike<T[K]>)>,
-  observer: ((val: T) => unknown | Promise<unknown>) | Partial<Observer<T, E>>
+  observer: ObserverLike<T, E>
 ): () => void {
   const o = toObserver<T, E>(observer);
   const keys = Object.keys(generators) as K[];
