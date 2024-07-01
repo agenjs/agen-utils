@@ -1,13 +1,13 @@
 import {
   type IterableLike,
-  type Observer,
+  type ObserverLike,
   toObserver,
   toAsyncIterator,
 } from "./types.ts";
 
 export function listen<T, E = Error>(
   params: IterableLike<T> | (() => IterableLike<T>),
-  observer: ((val: T) => unknown | Promise<unknown>) | Partial<Observer<T, E>>
+  observer: ObserverLike<T, E>
 ): () => void {
   let done = false;
   let it: AsyncGenerator<T, void>;
