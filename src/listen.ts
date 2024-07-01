@@ -7,7 +7,7 @@ import {
 
 export function listen<T, E = Error>(
   params: IterableLike<T> | (() => IterableLike<T>),
-  observer: ((val: T) => void | Promise<void>) | Observer<T, E>
+  observer: ((val: T) => unknown | Promise<unknown>) | Partial<Observer<T, E>>
 ): () => void {
   let done = false;
   let it: AsyncGenerator<T, void>;

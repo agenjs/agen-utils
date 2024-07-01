@@ -9,7 +9,7 @@ export function listenAll<T>(
         keyof T,
         IterableLike<T[keyof T]> | (() => IterableLike<T[keyof T]>)
       >,
-  observer: ((val: T) => void | Promise<void>) | Observer<T>
+  observer: ((val: T) => unknown | Promise<unknown>) | Partial<Observer<T>>
 ): () => void {
   return Array.isArray(generators)
     ? listenArray(
