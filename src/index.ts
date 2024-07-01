@@ -13,6 +13,7 @@ export * from "./listen.ts";
 export * from "./listenAll.ts";
 export * from "./listenArray.ts";
 export * from "./listenRecords.ts";
+export * from "./listenSources.ts";
 export * from "./map.ts";
 export * from "./multiplexer.ts";
 export * from "./newSkipQueue.ts";
