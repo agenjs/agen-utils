@@ -9,7 +9,7 @@ import {
 
 export function listenSources<T, E = Error>(
   sources: IterableLike<IterableLike<T>[]>,
-  observer: ObserverLike<T, E>,
+  observer: ObserverLike<(T | undefined)[], E>,
   equal: (
     first: (T | undefined)[],
     second: (T | undefined)[]
