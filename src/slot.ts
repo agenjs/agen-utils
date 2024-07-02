@@ -17,14 +17,11 @@ export function slot<T, E = Error>(
   const m = multiplexer<T, E>(
     compose<T>(
       iterator((o: Observer<T, E>) => {
-        observer = o;
-        (values as Slot<T, E>).observer = {
-          ...observer,
-          next: (v: T) => observer.next((value = v)),
+        observer = {
+          ...o,
+          next: (v: T) => o.next((value = v)),
         };
-        // Object.assign(values, observer, {
-        //   next: (v: T) => observer.next((value = v)),
-        // });
+        (values as Slot<T, E>).observer = observer;
       }, newQueue),
       fin((error?: E) => {
         done = true;
@@ -42,8 +39,8 @@ export function slot<T, E = Error>(
   }
   values.promise = promise;
   Object.defineProperty(values, "done", {
-    get: () => done
-  })
+    get: () => done,
+  });
   Object.defineProperty(values, "value", {
     get: () => value,
     set: (v) => {

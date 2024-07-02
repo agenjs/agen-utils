@@ -1,5 +1,5 @@
 import { describe, it, expect } from "./deps.ts";
-import { slot, } from "../src/index.ts";
+import { slot } from "../src/index.ts";
 
 describe("slot", () => {
   it("should be an async generator function with the 'value' property", async () => {
@@ -97,6 +97,7 @@ describe("slot", () => {
     let firstPromise = (async () => {
       for await (const value of s()) {
         result1.push(value);
+        expect(s.value).toEqual(value);
       }
     })();
 
@@ -104,6 +105,7 @@ describe("slot", () => {
     let secondPromise = (async () => {
       for await (const value of s()) {
         result2.push(value);
+        expect(s.value).toEqual(value);
       }
     })();
 
@@ -111,12 +113,14 @@ describe("slot", () => {
     let thirdPromise = (async () => {
       for await (const value of s()) {
         result3.push(value);
+        expect(s.value).toEqual(value);
       }
     })();
 
     (async () => {
       for (let i = 0; i < array.length; i++) {
         s.value = array[i];
+        expect(s.value).toEqual(array[i]);
         await new Promise((r) => setTimeout(r, 10));
         // await slot.observer.next(array[i]);
       }
