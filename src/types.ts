@@ -45,7 +45,7 @@ export type Observable<T, E = Error> = (
  */
 export type Slot<T, E = Error> = (<R = T>(
   filter?: (value: T) => R
-) => AsyncGenerator<T>) & {
+) => AsyncGenerator<R>) & {
   value: T;
   done: boolean;
   promise: Promise<void>;
