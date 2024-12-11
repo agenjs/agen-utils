@@ -9,14 +9,24 @@ export function listen<T, E = Error>(
   params: IterableLike<T> | (() => IterableLike<T>),
   observer: ObserverLike<T, E>,
 ): () => void {
-  let it: AsyncGenerator<T, void>;
+  let finalize: undefined | (() => void);
+  const end = new Promise<{ done: boolean; value?: T }>(
+    (r) => (finalize = () => r({ done: true })),
+  );
   (async () => {
     const o = toObserver<T, E>(observer);
     let error: E | undefined;
     try {
-      it = toAsyncIterator<T>(params);
-      for await (const value of it) {
-        await o.next(value);
+      const it = toAsyncIterator<T>(params);
+      let finished = false;
+      end.finally(() => {
+        finished = true;
+        it?.return?.(void 0);
+      });
+      while (!finished) {
+        const { done, value } = await Promise.race([it.next(), end]);
+        if (done) break;
+        await o.next(value as T);
       }
     } catch (e) {
       error = e as E;
@@ -29,6 +39,6 @@ export function listen<T, E = Error>(
     }
   })();
   return () => {
-    it?.return?.();
+    finalize?.();
   };
 }
