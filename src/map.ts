@@ -5,7 +5,7 @@ export function map<F, T>(
 ): (it: IterableLike<F> | (() => IterableLike<F>)) => AsyncGenerator<T> {
   return async function* (it: IterableLike<F> | (() => IterableLike<F>)) {
     let idx = 0;
-    for await (let value of toAsyncIterator(it)) {
+    for await (const value of toAsyncIterator(it)) {
       yield await f(value, idx++);
     }
   };

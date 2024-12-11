@@ -11,7 +11,7 @@ export function listenArray<T, E = Error>(
   observer: ObserverLike<T[], E>
 ): () => void {
   const o = toObserver<T[], E>(observer);
-  let promises: Promise<T>[] = new Array(generators.length);
+  const promises: Promise<T>[] = new Array(generators.length);
   const registrations = generators.map((gen, idx) =>
     listen<T, E>(toAsyncIterator(gen), {
       next: async (value) => {
